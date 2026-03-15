@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌊 Urlaub Le Lavandou — September 2026</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  /* Change 1: scroll-behavior smooth */
+  html { scroll-behavior: smooth; }
+
+  :root {
+    --blau: #1a6fa8;
+    --hellblau: #e8f4fd;
+    --tuerkis: #0097a7;
+    --sand: #f5e6c8;
+    --orange: #e87c2b;
+    --gruen: #4caf50;
+    --lila: #7b5ea7;
+    --dunkel: #1c2b3a;
+    --weiss: #ffffff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #f0f8ff;
+    color: var(--dunkel);
+  }
+
+  /* HEADER — Change 2: compact padding + updated h1/p/header-meta */
+  header {
+    background: linear-gradient(135deg, #1a6fa8 0%, #0097a7 50%, #00b4cc 100%);
+    color: white;
+    text-align: center;
+    padding: 20px 20px 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 0; right: 0;
+    height: 50px;
+    background: #f0f8ff;
+    clip-path: ellipse(55% 100% at 50% 100%);
+  }
+  header h1 { font-size: 1.75em; font-weight: 800; letter-spacing: 1px; text-shadow: 0 2px 8px rgba(0,0,0,0.3); position: relative; z-index: 1; }
+  header p { font-size: 0.88em; margin-top: 4px; opacity: 0.85; position: relative; z-index: 1; }
+  .header-meta {
+    display: flex; justify-content: center; gap: 6px; margin-top: 8px; flex-wrap: wrap;
+    position: relative; z-index: 1;
+  }
+  .header-meta span {
+    background: rgba(0, 40, 90, 0.55);
+    border-radius: 20px; padding: 3px 10px; font-size: 0.78em;
+    color: white; font-weight: 600; text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+  }
+
+  /* MAIN LAYOUT */
+  main { max-width: 1100px; margin: 0 auto; padding: 40px 20px 60px; }
+
+  /* SECTION TITLE */
+  .section-title {
+    font-size: 1.6em;
+    font-weight: 800;
+    margin: 40px 0 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #0d3f6b;
+    border-bottom: 3px solid var(--tuerkis);
+    padding-bottom: 8px;
+  }
+
+  /* CARD GRID */
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+
+  .card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 8px 28px rgba(0,0,0,0.13); }
+
+  .card-header {
+    padding: 18px 20px 14px;
+    color: white;
+    font-size: 1.15em;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-header.blau    { background: linear-gradient(135deg, #1a6fa8, #0097a7); }
+  .card-header.gruen   { background: linear-gradient(135deg, #2e7d32, #4caf50); }
+  .card-header.sand    { background: linear-gradient(135deg, #e87c2b, #f5a623); }
+  .card-header.lila    { background: linear-gradient(135deg, #6a1b9a, #9c27b0); }
+  .card-header.rot     { background: linear-gradient(135deg, #c62828, #e53935); }
+  .card-header.teal    { background: linear-gradient(135deg, #00695c, #00bcd4); }
+
+  .card-body { padding: 18px 20px; }
+  .card-body p { margin-bottom: 8px; line-height: 1.6; font-size: 0.97em; }
+  .card-body ul { padding-left: 20px; }
+  .card-body li { margin-bottom: 6px; line-height: 1.6; font-size: 0.97em; }
+
+  .tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    font-weight: 600;
+    margin: 3px 3px 3px 0;
+  }
+  .tag-blau   { background: var(--hellblau); color: var(--blau); }
+  .tag-gruen  { background: #e8f5e9; color: #2e7d32; }
+  .tag-orange { background: #fff3e0; color: #e65100; }
+  .tag-lila   { background: #f3e5f5; color: #6a1b9a; }
+  .tag-rot    { background: #ffebee; color: #c62828; }
+
+  .link-btn {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    background: var(--hellblau);
+    color: var(--blau);
+    font-weight: 600;
+    font-size: 0.88em;
+    text-decoration: none;
+    border: 1.5px solid #b3d9f5;
+    transition: background 0.2s;
+  }
+  .link-btn:hover { background: #d0eaf8; }
+  .link-btn + .link-btn { margin-left: 8px; }
+
+  /* HIGHLIGHT BOX */
+  .highlight {
+    background: linear-gradient(135deg, #e8f4fd, #e0f7fa);
+    border-left: 5px solid var(--tuerkis);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    font-size: 1em;
+    line-height: 1.7;
+  }
+  .highlight strong { color: var(--blau); }
+
+  /* MAP */
+  #map, .map-frame {
+    width: 100%;
+    height: 480px;
+    border-radius: 18px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+    margin: 20px 0;
+    border: 3px solid white;
+    display: block;
+  }
+
+  /* WETTER TABLE */
+  .wetter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 14px;
+    margin: 16px 0;
+  }
+  .wetter-box {
+    background: white;
+    border-radius: 14px;
+    padding: 18px 12px;
+    text-align: center;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+  }
+  .wetter-box .icon { font-size: 2em; }
+  .wetter-box .val { font-size: 1.4em; font-weight: 800; color: var(--blau); margin: 6px 0 2px; }
+  .wetter-box .lbl { font-size: 0.8em; color: #666; }
+
+  /* TIPS FOOTER */
+  .tipp-box {
+    background: linear-gradient(135deg, #fff8e1, #fffde7);
+    border-radius: 14px;
+    padding: 20px 24px;
+    border: 1.5px solid #ffe082;
+    margin-top: 20px;
+  }
+  .tipp-box h3 { color: #e65100; margin-bottom: 10px; }
+  .tipp-box ul { padding-left: 20px; }
+  .tipp-box li { margin-bottom: 6px; line-height: 1.6; }
+
+  /* NIGHTLIFE WARNING */
+  .nightlife-hint {
+    background: #f3e5f5;
+    border-left: 4px solid #9c27b0;
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-top: 12px;
+    font-size: 0.92em;
+  }
+
+  @media (max-width: 600px) {
+    header h1 { font-size: 1.7em; }
+    .section-title { font-size: 1.3em; }
+  }
+
+  /* Change 3: KOMPAKTES WETTER + AKKORDEON */
+  /* KOMPAKTES WETTER */
+  .wetter-kompakt {
+    background: white; border-radius: 12px; padding: 11px 16px; font-size: 0.9em; color: #444;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.07); line-height: 2; display: flex; flex-wrap: wrap; gap: 6px 14px;
+  }
+  .wetter-kompakt span { white-space: nowrap; }
+
+  /* AKKORDEON */
+  .section-title.collapsible { cursor: pointer; user-select: none; }
+  .section-title.collapsible:hover { opacity: 0.82; }
+  .sec-arrow { margin-left: auto; font-size: 0.65em; opacity: 0.5; flex-shrink: 0; padding-left: 8px; }
+  .section-body {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.35s ease;
+  }
+  .section-body.open {
+    max-height: 5000px;
+  }
+
+  /* NAV BAR */
+  #main-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    background: linear-gradient(135deg, #1a6fa8, #0097a7);
+    display: flex; gap: 0; overflow-x: auto; scrollbar-width: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  #main-nav::-webkit-scrollbar { display: none; }
+  #main-nav a {
+    color: white; text-decoration: none; padding: 10px 14px;
+    font-size: 0.82em; font-weight: 600; white-space: nowrap;
+    opacity: 0.85; transition: opacity 0.2s, background 0.2s;
+  }
+  #main-nav a:hover { opacity: 1; background: rgba(255,255,255,0.15); }
+  body { padding-top: 40px; }
+
+  /* STICKY SECTION TITLE */
+  .section-title {
+    position: sticky;
+    top: 40px;
+    z-index: 100;
+    background: #f0f8ff;
+  }
+
+  /* BACK TO TOP */
+  #back-to-top {
+    position: fixed; bottom: 24px; right: 20px; z-index: 999;
+    background: linear-gradient(135deg, #1a6fa8, #0097a7);
+    color: white; border: none; border-radius: 50%;
+    width: 44px; height: 44px; font-size: 1.3em;
+    cursor: pointer; box-shadow: 0 3px 12px rgba(0,0,0,0.25);
+    opacity: 0; transition: opacity 0.3s; pointer-events: none;
+  }
+  #back-to-top.visible { opacity: 1; pointer-events: auto; }
+</style>
+</head>
+<body>
+
+<nav id="main-nav">
+  <a href="#" onclick="goTo('sec-karte'); return false;">🗺️ Karte</a>
+  <a href="#" onclick="goTo('sec-schnorcheln'); return false;">🤿 Schnorcheln</a>
+  <a href="#" onclick="goTo('sec-kinder'); return false;">🎉 Kids</a>
+  <a href="#" onclick="goTo('sec-straende'); return false;">🏖️ Strände</a>
+  <a href="#" onclick="goTo('sec-wald'); return false;">🌲 Wald</a>
+  <a href="#" onclick="goTo('sec-restaurant'); return false;">🍽️ Essen</a>
+  <a href="#" onclick="goTo('sec-geheimtipps'); return false;">🔍 Tipps</a>
+  <a href="#" onclick="goTo('sec-nightlife'); return false;">🎵 Abend</a>
+  <a href="#" onclick="goTo('sec-action'); return false;">🎯 Action</a>
+  <a href="#" onclick="goTo('sec-combos'); return false;">📅 Combos</a>
+  <a href="#" onclick="goTo('sec-notfall'); return false;">📞 Nummern</a>
+</nav>
+
+<!-- Change 4: compact header HTML -->
+<header>
+  <h1>🌊 Urlaub Le Lavandou</h1>
+  <p>Côte d'Azur · Provence · Frankreich</p>
+  <div class="header-meta">
+    <span>📅 1.–12. September 2026</span>
+    <span>🏡 Pierrefeu-du-Var</span>
+    <span>👨‍👩‍👧‍👦 2 Familien · 2 Kids</span>
+  </div>
+</header>
+
+<main>
+
+  <!-- KARTE — Change 6: id="sec-karte" -->
+  <div id="sec-karte" class="section-title">🗺️ Karte — Alle Spots auf einen Blick</div>
+  <div id="map"></div>
+
+  <!-- WETTER — Change 5: compact weather replaces wetter-grid -->
+  <div class="section-title">☀️ September-Wetter</div>
+  <div class="wetter-kompakt">
+    <span>🌡️ <strong>24–28°C</strong> Luft</span>
+    <span>🌊 <strong>21–23°C</strong> Wasser</span>
+    <span>☀️ <strong>8 Std.</strong> Sonne/Tag</span>
+    <span>🌧️ <strong>5–6</strong> Regentage</span>
+    <span>🏖️ <strong>deutlich weniger</strong> Touristen als August</span>
+  </div>
+  <div id="wetter-live" style="margin-top:8px; font-size:0.85em; color:#555; padding:6px 4px; min-height:20px;">
+    <span style="opacity:0.5">⏳ Lade aktuelles Wetter…</span>
+  </div>
+
+  <!-- SCHNORCHELN — Change 6: id="sec-schnorcheln" -->
+  <div id="sec-schnorcheln" class="section-title">🤿 Schnorcheln</div>
+  <div class="card-grid">
+
+    <!-- Change 7: id="card-portcros" -->
+    <div id="card-portcros" class="card">
+      <div class="card-header blau">⭐ Île de Port-Cros — Highlight!</div>
+      <div class="card-body">
+        <p>Europas erster Meeresschutzpark. Glasklares Wasser, markierter Unterwasserpfad bis 10 m tief.</p>
+        <p>Was man sieht: 🐙 Oktopus · 🐟 Barrakuda · ⭐ Seesterne · 🐠 Barsche</p>
+        <span class="tag tag-blau">30 Min. Fähre ab Le Lavandou</span>
+        <span class="tag tag-orange">17–26 € / Person</span>
+        <span class="tag tag-gruen">Kids ab 8 J. perfekt</span>
+        <br>
+        <a class="link-btn" href="https://www.vedettesilesdor.fr" target="_blank">🚢 Fähre buchen</a>
+        <a class="link-btn" href="https://www.google.com/maps/search/?api=1&query=Port+du+Lavandou+ferry+terminal" target="_blank">📍 Fährhafen Maps</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">🏖️ Strände direkt vor Ort</div>
+      <div class="card-body">
+        <ul>
+          <li><strong>Plage d'Aiguebelle</strong> — Felsen, Fische, einfacher Einstieg</li>
+          <li><strong>Plage de Saint-Clair</strong> — flach, kristallklar, ideal für Kinder</li>
+          <li><strong>Plage du Cavalière</strong> — etwas abgelegen, traumhaft</li>
+        </ul>
+        <span class="tag tag-blau">Kostenlos</span>
+        <span class="tag tag-gruen">Keine Fahrt nötig</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- VERSTECKTE BUCHT — Change 6: id="sec-bucht" -->
+  <div id="sec-bucht" class="section-title">🏝️ Versteckte Bucht</div>
+  <div class="highlight">
+    <strong>Crique de Jean Blanc (Plage de l'Éléphant)</strong><br>
+    Eine der schönsten Geheimbuchten — weißer Sand mit Silberglitzer, absolut türkisblaues Wasser, kaum Touristen. Nur Eingeweihte kennen sie.<br><br>
+    📍 <strong>So kommt ihr hin:</strong> D559 Richtung Saint-Tropez, ca. 5 km vom Zentrum. Kleiner Parkplatz rechts, dann ~100 Stufen hinunter. Lohnt sich!<br>
+    ⏱️ <strong>Fußweg:</strong> ~5–10 Minuten ab Parkplatz (100 Stufen bergab, gleiches zurück)<br><br>
+    <span class="tag tag-blau">Zu Fuß erreichbar</span>
+    <span class="tag tag-gruen">Hervorragend zum Schnorcheln</span>
+    <span class="tag tag-orange">Kostenlos · kaum Touristen</span>
+    <br><br>
+    <a class="link-btn" href="https://www.google.com/maps/search/?api=1&query=Crique+de+Jean+Blanc+Le+Lavandou" target="_blank">📍 Google Maps</a>
+    <a class="link-btn" href="https://www.ot-lelavandou.fr/en/destination/les-12-plages-du-lavandou/la-plage-de-jean-blanc/" target="_blank">ℹ️ Mehr Infos</a>
+  </div>
+
+  <!-- AKTIVITÄTEN KIDS -->
+  <div id="sec-kinder" class="section-title">🎉 Aktivitäten für die Kids</div>
+  <div class="card-grid">
+
+    <div class="card">
+      <div class="card-header sand">🚢 Insel-Abenteuer Port-Cros</div>
+      <div class="card-body">
+        <p>Fähre fahren + Schnorcheln + Nationalpark erkunden — für 8-Jährige das reinste Abenteuer. Keine Autos auf der Insel!</p>
+        <span class="tag tag-orange">Bootsfahrt 30 Min.</span>
+        <span class="tag tag-gruen">Leichte Wanderwege</span>
+        <br>
+        <a class="link-btn" href="https://www.vedettesilesdor.fr" target="_blank">🎫 Tickets</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header sand">🏄 Wassersport am Strand</div>
+      <div class="card-body">
+        <ul>
+          <li>🛶 Kayak & Paddle-Board leihen</li>
+          <li>🪂 Parasailing</li>
+          <li>🌊 Wasserski</li>
+        </ul>
+        <p>Alles direkt an den Stränden von Le Lavandou buchbar.</p>
+        <span class="tag tag-blau">Verleih vor Ort</span>
+        <br>
+        <a class="link-btn" href="https://www.google.com/maps/search/?api=1&query=location+kayak+paddle+Le+Lavandou" target="_blank">📍 Kayak-Verleih Maps</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header sand">🎡 Azur Park (Regentag-Option)</div>
+      <div class="card-body">
+        <p>Vergnügungspark nahe Saint-Tropez — ideal wenn's mal regnet oder die Kids einfach Spaß wollen.</p>
+        <span class="tag tag-orange">~45 Min. Fahrt</span>
+        <br>
+        <a class="link-btn" href="https://www.azurpark.com" target="_blank">🎢 Website</a>
+        <a class="link-btn" href="https://www.google.com/maps/search/?api=1&query=Azur+Park+Saint-Tropez" target="_blank">📍 Google Maps</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- STRÄNDE — Change 6: id="sec-straende" -->
+  <div id="sec-straende" class="section-title">🏖️ Die besten Strände</div>
+  <p style="margin-bottom:16px; color:#555; font-size:0.95em;">Alle Fahrtzeiten ab Pierrefeu-du-Var.</p>
+  <div class="card-grid">
+
+    <div class="card">
+      <div class="card-header blau">🥇 Plage d'Aiguebelle</div>
+      <div class="card-body">
+        <p>Einer der schönsten Strände der ganzen Côte d'Azur. Kristallklares Wasser, Felsen, ideal zum Schnorcheln.</p>
+        <span class="tag tag-blau">Schnorcheln</span>
+        <span class="tag tag-gruen">Schattige Pinienbäume</span>
+        <span class="tag tag-orange">Restaurant direkt dabei</span>
+        <span class="tag tag-lila">🚗 ~30 Min.</span>
+        <br>
+        <a class="link-btn" href="https://www.google.com/maps/search/?api=1&query=Plage+d%27Aiguebelle+Le+Lavandou" target="_blank">📍 Google Maps</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blau">🥈 Plage de Saint-Clair</div>
+      <div class="card-body">
+        <p>Feiner heller Sand, flach abfallendes Wasser — perfekt für Kinder. Cafés und Restaurants direkt am Strand.</p>
+        <span class="tag tag-gruen">Ideal für Kinder</span>
+        <span class="tag tag-blau">Flach & sicher</span>
+        <span class="tag tag-orange">Restaurant nebenan</span>
+        <span class="tag tag-lila">🚗 ~28 Min.</span>
+        <br>
+        <a class="link-btn" href="https://www.google.com/maps/search/?api=1&query=Plage+de+Saint-Clair+Le+Lavandou" target="_blank">📍 Google Maps</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blau">🥉 Plage du Cavalière</div>
+      <div class="card-body">
+        <p>Ruhigerer, abgelegener Strand etwas außerhalb von Le Lavandou — traumhafte Kulisse mit Pinien, türkises Wasser, sehr ruhig im September.</p>
+        <span class="tag tag-lila">Ruhig & naturbelassen</span>
+        <span class="tag tag-blau">Türkises Wasser</span>
+        <span class="tag tag-lila">🚗 ~35 Min.</span>
+        <br>
+        <a class="link-btn" href="https://www.google.com/maps/search/?api=1&query=Plage+du+Cavaliere+Le+Lavandou" target="_blank">📍 Google Maps</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">🏝️ L'Estagnol — Geheimtipp</div>
+      <div class="card-body">
+        <p>Fast naturbelassener Strand, kaum bebaut. Posidonia-Seegras im Wasser ist ein Zeichen für Top-Wasserqualität. Wunderschön und ruhig.</p>
+        <span class="tag tag-gruen">Naturbelassen</span>
+        <span class="tag tag-blau">Top Wasserqualität</span>
+        <span class="tag tag-lila">Wenig Touristen</span>
+        <span class="tag tag-lila">🚗 ~35 Min.</span>
+        <br>
+        <a class="link-btn" href="https://www.google.com/maps/search/?api=1&query=Plage+L%27Estagnol+Le+Lavandou" target="_blank">📍 Google Maps</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">🌊 Plage de Pramousquier</div>
+      <div class="card-body">
+        <p>Kleiner, familiärer Strand zwischen Felsen — ruhiger als die großen Strände, gutes Schnorcheln, angenehme Atmosphäre. Restaurants in der Nähe.</p>
+        <span class="tag tag-gruen">Familiär & ruhig</span>
+        <span class="tag tag-blau">Schnorcheln</span>
+        <span class="tag tag-lila">🚗 ~33 Min.</span>
+        <br>
+        <a class="link-btn" href="https://www.google.com/maps/search/?api=1&query=Plage+de+Pramousquier+Le+Lavandou" target="_blank">📍 Google Maps</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">🌅 Plage de la Fossette</div>
+      <div class="card-body">
+        <p>Kleiner Strand in einer geschützten Bucht direkt bei Le Lavandou — ruhiges Wasser, perfekt für Kinder, das Restaurant Coco Beach ist direkt dabei.</p>
+        <span class="tag tag-gruen">Geschützte Bucht</span>
+        <span class="tag tag-rot">Coco Beach Restaurant dabei</span>
+        <span class="tag tag-lila">🚗 ~27 Min.</span>
+        <br>
+        <a class="link-btn" href="https://www.google.com/maps/search/?api=1&query=Plage+de+la+Fossette+Le+Lavandou" target="_blank">📍 Google Maps</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- KÜSTENWANDERWEG -->
+  <div id="sec-kuestenweg" class="section-title">🚶 Sentier du Littoral — Küstenweg</div>
+  <div class="highlight">
+    <strong>Der Küstenwanderweg (Sentier du Littoral)</strong> verbindet alle Buchten und Strände von Le Lavandou auf ca. <strong>10 km</strong> entlang der Felsen. Man entdeckt unterwegs versteckte Criques, die man sonst nie findet.<br><br>
+    🗺️ <strong>Strecke:</strong> Le Lavandou → Aiguebelle → Jean Blanc → Pramousquier → Cavalière<br>
+    ⏱️ <strong>Gesamtdauer:</strong> ca. 3–4 Stunden für alle 10 km<br><br>
+    📏 <strong>Abschnitte einzeln:</strong><br>
+    &nbsp;• Le Lavandou → Aiguebelle: ~3 km · <strong>~45 Minuten</strong><br>
+    &nbsp;• Aiguebelle → Crique Jean Blanc: ~2 km · <strong>~30 Minuten</strong><br>
+    &nbsp;• Jean Blanc → Pramousquier: ~2 km · <strong>~35 Minuten</strong><br>
+    &nbsp;• Pramousquier → Cavalière: ~3 km · <strong>~50 Minuten</strong><br><br>
+    👶 <strong>Für 8-Jährige:</strong> Die ersten 3 km (bis Aiguebelle) sind leicht und ideal mit Kids<br><br>
+    <span class="tag tag-blau">Kostenlos</span>
+    <span class="tag tag-gruen">Kein Eintritt</span>
+    <span class="tag tag-orange">Festes Schuhwerk empfohlen</span>
+    <span class="tag tag-lila">Wasser & Snacks mitnehmen!</span>
+    <br><br>
+    <a class="link-btn" href="https://www.google.com/maps/search/?api=1&query=Sentier+du+Littoral+Le+Lavandou" target="_blank">📍 Startpunkt Google Maps</a>
+  </div>
+
+  <!-- MASSIF DES MAURES WALD — Change 6: id="sec-wald" -->
+  <div id="sec-wald" class="section-title">🌲 Massif des Maures — Waldabenteuer</div>
+  <div class="card-grid">
+
+    <div class="card">
+      <div class="card-header gruen">🌳 Was ist das?</div>
+      <div class="card-body">
+        <p>Uralter Korkwald direkt hinter Le Lavandou. Einsame Wanderwege durch Korkbäume, Steineichen und wildes Maquis-Buschland. Vogelstimmen, Zikaden, Stille.</p>
+        <p>Im September angenehm: nicht zu heiß unter dem Blätterdach.</p>
+        <span class="tag tag-gruen">Wilder Wald</span>
+        <span class="tag tag-blau">Panoramaaussichten aufs Meer</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gruen">⭐ Highlights im Wald</div>
+      <div class="card-body">
+        <ul>
+          <li><strong>Chartreuse de la Verne</strong> — beeindruckendes mittelalterliches Kloster mitten im Wald (kein Stadtbummel, echtes Abenteuer!)</li>
+          <li><strong>Bormes-les-Mimosas</strong> — charmantes Dorf am Waldrand mit Bougainvillea-Gassen, 5 Min. Fahrt</li>
+          <li><strong>Col de Babaou</strong> — Passhöhe mit Panorama aufs Meer und die Inseln</li>
+          <li><strong>Collobrières</strong> — Kastaniendorf, Maronen-Likör & Marmelade kaufen</li>
+        </ul>
+        <span class="tag tag-orange">Collobrières ~20 Min. von Pierrefeu</span>
+        <br>
+        <a href="https://www.google.com/maps/search/?api=1&query=Bormes-les-Mimosas+France" target="_blank" class="link-btn">📍 Bormes-les-Mimosas</a>
+        <a href="https://www.google.com/maps/search/?api=1&query=Massif+des+Maures+France" target="_blank" class="link-btn">📍 Massif des Maures</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gruen">🦎 Tiere & Natur</div>
+      <div class="card-body">
+        <p>Im Massif des Maures leben:</p>
+        <ul>
+          <li>🐢 <strong>Griechische Landschildkröten</strong> — endemisch, die Kids werden ausrasten!</li>
+          <li>🦅 Adler & Falken</li>
+          <li>🐗 Wildschweine (nachts, kein Risiko tagsüber)</li>
+          <li>🦎 Eidechsen überall</li>
+        </ul>
+        <span class="tag tag-gruen">Schildkröten-Sichtung möglich!</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RESTAURANTS -->
+  <div id="sec-restaurant" class="section-title">🍽️ Essen — entspannt, für alle</div>
+  <p style="margin-bottom:16px; color:#555; font-size:0.95em;">Alles familienfreundlich, kein Fine Dining — Kinder willkommen, Vegetarier versorgt.</p>
+
+  <div class="card-grid">
+
+    <div class="card">
+      <div class="card-header gruen">🥗 Tout Va Bio — Veggie Liebling</div>
+      <div class="card-body">
+        <p>Bio-Laden + Mitnahme-Küche direkt in Le Lavandou. Frisch, lecker, günstig — auch super für ein Picknick am Strand.</p>
+        <p>📍 29 Avenue des Commandos d'Afrique, Le Lavandou</p>
+        <span class="tag tag-gruen">Vegetarisch · Vegan</span>
+        <span class="tag tag-blau">Günstig</span>
+        <span class="tag tag-orange">Picknick-tauglich</span>
+        <br>
+        <a class="link-btn" href="https://www.google.com/maps/search/?api=1&query=Tout+Va+Bio+Le+Lavandou" target="_blank">📍 Google Maps</a>
+        <a class="link-btn" href="https://www.happycow.net/reviews/tout-va-bio-traiteur-le-lavandou-156711" target="_blank">🌿 HappyCow</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header rot">🍕 Pizza-Abend für die Kids</div>
+      <div class="card-body">
+        <p>Pizza am Hafen — Terrasse, Meer, Atmosphäre. Kinder-Magnete.</p>
+        <ul>
+          <li><strong>La Pizzeria du Port</strong> — direkt am Hafen, Abendambiente, Terrasse</li>
+          <li><strong>Chez Marino</strong> — Holzofen, beliebt bei Familien, sehr entspannt</li>
+        </ul>
+        <span class="tag tag-rot">Kinder lieben es</span>
+        <span class="tag tag-orange">Normales Budget</span>
+        <span class="tag tag-blau">Terrasse · Hafen</span>
+        <br>
+        <a class="link-btn" href="https://www.google.com/maps/search/?api=1&query=Pizzeria+du+Port+Le+Lavandou" target="_blank">📍 La Pizzeria du Port</a>
+        <a class="link-btn" href="https://www.google.com/maps/search/?api=1&query=Chez+Marino+Le+Lavandou" target="_blank">📍 Chez Marino</a>
+        <a class="link-btn" href="https://www.tripadvisor.com/Restaurants-g196677-zff9-Le_Lavandou_French_Riviera_Cote_d_Azur_Provence_Alpes_Cote_d_Azur.html" target="_blank">🍕 TripAdvisor Pizza</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blau">🌊 Coco Beach — La Fossette</div>
+      <div class="card-body">
+        <p>Restaurant direkt am Wasser in einer kleinen Bucht — nur Wellenrauschen und Zikaden. Fisch & Meeresfrüchte, aber auch Pasta & Salate für Vegetarier. <em>Kein feines Restaurant</em>, eher Bistro-Feeling.</p>
+        <span class="tag tag-blau">Direkt am Meer</span>
+        <span class="tag tag-gruen">Mittleres Budget</span>
+        <span class="tag tag-orange">Reservierung empfohlen!</span>
+        <br>
+        <a class="link-btn" href="https://www.google.com/maps/search/?api=1&query=Coco+Beach+La+Fossette+Le+Lavandou" target="_blank">📍 Google Maps</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header blau">🍹 Le Tam-Tam — Bar & Essen</div>
+      <div class="card-body">
+        <p>Entspannte Terrasse mit Meerblick, Cocktails, internationale Küche mit vegetarischen Optionen. Gut für Abende wenn man nicht groß kochen will.</p>
+        <span class="tag tag-lila">Bar + Restaurant</span>
+        <span class="tag tag-blau">Meerblick</span>
+        <span class="tag tag-gruen">Vegetarische Optionen</span>
+        <br>
+        <a class="link-btn" href="https://www.google.com/maps/search/?api=1&query=Le+Tam+Tam+Le+Lavandou" target="_blank">📍 Google Maps</a>
+      </div>
+    </div>
+
+    <!-- Change 7: id="card-gaia" -->
+    <div id="card-gaia" class="card">
+      <div class="card-header gruen">🥦 Gaïa Natural Food — Hyères</div>
+      <div class="card-body">
+        <p>Echtes vegetarisches Restaurant — nicht langweilig, Weltküche-Einflüsse, schönes Ambiente. Für einen Ausflug nach Hyères ideal.</p>
+        <p>📍 Hyères (~25 Min. Fahrt)</p>
+        <span class="tag tag-gruen">Rein vegetarisch</span>
+        <span class="tag tag-orange">Di–So Mittag + Abend</span>
+        <span class="tag tag-blau">Mittleres Budget</span>
+        <br>
+        <a class="link-btn" href="https://www.google.com/maps/search/?api=1&query=Gaia+Natural+Food+Hyeres" target="_blank">📍 Google Maps</a>
+        <a class="link-btn" href="https://www.facebook.com/gaianaturalfood/" target="_blank">📘 Facebook</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header sand">🧅 Lokale Klassiker probieren</div>
+      <div class="card-body">
+        <p>Diese Sachen einfach irgendwo bestellen — typisch provenzalisch & günstig:</p>
+        <ul>
+          <li>🍅 <strong>Ratatouille</strong> — 100% vegetarisch ✅</li>
+          <li>🫒 <strong>Tapenade + Brot</strong> — 100% vegetarisch ✅</li>
+          <li>🥗 <strong>Salade Niçoise</strong> — vegetarisch ohne Thunfisch bestellen ✅</li>
+          <li>🧀 <strong>Fromage de chèvre chaud</strong> — warmer Ziegenkäse-Salat, überall ✅</li>
+          <li>🥂 <strong>Rosé Côtes de Provence</strong> — Pflicht!</li>
+        </ul>
+        <span class="tag tag-gruen">Alles vegetarisch bestellbar</span>
+        <span class="tag tag-orange">Günstig</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- GEHEIMTIPPS — Change 6: id="sec-geheimtipps" -->
+  <div id="sec-geheimtipps" class="section-title">🔍 Geheimtipps — max. 1h Fahrt, normales Budget</div>
+
+  <div class="card-grid">
+
+    <div class="card">
+      <div class="card-header teal">🐢 Schildkröten im Wald</div>
+      <div class="card-body">
+        <p>Im Massif des Maures leben die letzten wilden <strong>Griechischen Landschildkröten Frankreichs</strong> — die Kids werden ausrasten wenn sie eine entdecken.</p>
+        <p>Einfach auf einem der Waldwege spazieren, Augen offen halten. Bester Spot: Wege bei <strong>La Garde-Freinet</strong> oder rund um Collobrières.</p>
+        <p>⏱️ <strong>Spaziergang:</strong> 30–60 Minuten reichen — kein Ziel, einfach schlendern und schauen.</p>
+        <span class="tag tag-gruen">Kostenlos</span>
+        <span class="tag tag-orange">~20 Min. von Pierrefeu</span>
+        <span class="tag tag-gruen">Kids-Garant!</span>
+        <br>
+        <a class="link-btn" href="https://www.google.com/maps/search/?api=1&query=La+Garde-Freinet+France" target="_blank">📍 La Garde-Freinet</a>
+      </div>
+    </div>
+
+    <!-- Change 7: id="card-collobrieres" -->
+    <div id="card-collobrieres" class="card">
+      <div class="card-header teal">🌰 Collobrières — Kastaniendorf</div>
+      <div class="card-body">
+        <p>Das süßeste Dorf der Region. Mittendrin ein Fluss, der durch den Ort läuft. Berühmt für Kastanien-Produkte.</p>
+        <ul>
+          <li>🏪 Lokale Marrons glacés & Kastanien-Likör kaufen</li>
+          <li>🌊 Im Fluss plantschen (Kinder!)</li>
+          <li>🍦 Eis mit Kastanien-Geschmack</li>
+        </ul>
+        <span class="tag tag-orange">~25 Min. Fahrt</span>
+        <span class="tag tag-gruen">Kostenlos rein</span>
+        <span class="tag tag-blau">Kein Touristentrubel</span>
+        <br>
+        <a class="link-btn" href="https://www.google.com/maps/search/?api=1&query=Collobrieres+France" target="_blank">📍 Google Maps</a>
+      </div>
+    </div>
+
+    <!-- Change 7: id="card-porquerolles" -->
+    <div id="card-porquerolles" class="card">
+      <div class="card-header teal">⛵ Île de Porquerolles</div>
+      <div class="card-body">
+        <p>Gilt als schönste Insel Frankreichs — weiße Strände wie in der Karibik, türkises Wasser. Keine Autos auf der Insel!</p>
+        <ul>
+          <li>🏖️ Plage d'Argent — traumhafter weißer Strand</li>
+          <li>🚲 Fahrräder direkt nach der Fähre leihen</li>
+          <li>🤿 Schnorcheln in Naturbuchten</li>
+        </ul>
+        <span class="tag tag-orange">Fähre ab Hyères ~20€</span>
+        <span class="tag tag-blau">~45 Min. Fahrt nach Hyères</span>
+        <br>
+        <a class="link-btn" href="https://www.google.com/maps/search/?api=1&query=Port+de+Giens+Hyeres+Porquerolles" target="_blank">📍 Fähre Google Maps</a>
+        <a class="link-btn" href="https://www.tlv-tvm.com" target="_blank">🚢 Fähre buchen</a>
+      </div>
+    </div>
+
+    <!-- Change 7: id="card-babaou" -->
+    <div id="card-babaou" class="card">
+      <div class="card-header teal">🏔️ Col de Babaou — Panorama</div>
+      <div class="card-body">
+        <p>Passhöhe im Massif des Maures mit atemberaubendem Panorama: Meer, die goldenen Inseln, und der ganze Wald — alles auf einen Blick.</p>
+        <p>⏱️ <strong>Fußweg:</strong> ~10 Minuten vom Parkplatz zum Aussichtspunkt — kinderleicht, auch für 8-Jährige perfekt.</p>
+        <span class="tag tag-gruen">Kostenlos</span>
+        <span class="tag tag-orange">~20 Min. Fahrt</span>
+        <span class="tag tag-blau">Kein Aufwand</span>
+        <br>
+        <a class="link-btn" href="https://www.google.com/maps/search/?api=1&query=Col+de+Babaou+Var" target="_blank">📍 Google Maps</a>
+      </div>
+    </div>
+
+    <!-- Change 7: id="card-chartreuse" -->
+    <div id="card-chartreuse" class="card">
+      <div class="card-header teal">🏰 Chartreuse de la Verne</div>
+      <div class="card-body">
+        <p>Mittelalterliches Kloster mitten im Urwald — kein Stadtbummel, ein echtes Erlebnis. Die Ruinen sind mystisch, der Wald drumherum wild. Kids finden das cool.</p>
+        <p>⏱️ <strong>Fußweg:</strong> ~5 Minuten Parkplatz zum Eingang · <strong>Besichtigung:</strong> ca. 1–1,5 Stunden</p>
+        <span class="tag tag-orange">~30 Min. Fahrt</span>
+        <span class="tag tag-lila">Eintritt: ~5 €</span>
+        <span class="tag tag-gruen">Kein Massentourismus</span>
+        <br>
+        <a class="link-btn" href="https://www.google.com/maps/search/?api=1&query=Chartreuse+de+la+Verne+Var" target="_blank">📍 Google Maps</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">🌊 Calanques de Cassis</div>
+      <div class="card-body">
+        <p>Wilde Felsbuchten mit türkisblauem Wasser — spektakulär. Bootsfahrt ab Cassis zu den Calanques, Schnorcheln direkt unter den weißen Kalkfelsen.</p>
+        <span class="tag tag-orange">~55 Min. Fahrt</span>
+        <span class="tag tag-blau">Bootsfahrt ~15 €</span>
+        <span class="tag tag-gruen">Lohnt sich sehr!</span>
+        <br>
+        <a class="link-btn" href="https://www.google.com/maps/search/?api=1&query=Calanques+Cassis+France" target="_blank">📍 Google Maps</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- NIGHTLIFE — Change 6: id="sec-nightlife" -->
+  <div id="sec-nightlife" class="section-title">🎵 Abend-Bar — Electronic für die Eltern</div>
+
+  <div class="card-grid">
+
+    <div class="card">
+      <div class="card-header sand">🌅 Strandbar direkt in Le Lavandou</div>
+      <div class="card-body">
+        <p>Direkt vor Ort, kein Fahren nötig — Cocktail, Meerblick, Abendstimmung:</p>
+        <ul>
+          <li><strong>Le Tam-Tam Beach Bar</strong> — Strandterrasse, DJ-Abende, Cocktails, Sonnenuntergang. Beliebt, entspannt, gutes Ambiente</li>
+          <li><strong>Bar du Port</strong> — direkt am Hafen, Live-Musik in der Hochsaison, schöne Atmosphäre abends</li>
+          <li><strong>La Fossette Beach</strong> — kleiner Strandbereich mit Bar, romantisch und ruhig</li>
+        </ul>
+        <span class="tag tag-orange">Direkt in Le Lavandou</span>
+        <span class="tag tag-gruen">Kein Fahren</span>
+        <span class="tag tag-blau">Sonnenuntergang inklusive</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header lila">🍹 Bar-Style in Toulon</div>
+      <div class="card-body">
+        <p>Toulon hat eine lebhafte Bar-Szene mit Electronic / House Music — eher entspannt, kein Mega-Club. Perfekt für einen Abend zu zweit.</p>
+        <ul>
+          <li><strong>La Seyne-sur-Mer / Toulon Hafen</strong> — mehrere Bars mit elektronischer Musik am Wasser</li>
+          <li>Atmosphäre: Bar + Terrasse + DJ, nicht Großclub</li>
+        </ul>
+        <span class="tag tag-lila">~35 Min. Fahrt</span>
+        <span class="tag tag-gruen">Normales Budget</span>
+        <span class="tag tag-orange">Abend ab 22 Uhr</span>
+        <br>
+        <a class="link-btn" href="https://www.eventbrite.fr/d/france--toulon/electronic-music/" target="_blank">🎵 Events Toulon</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header lila">🎧 Aktuelle Events finden</div>
+      <div class="card-body">
+        <p>Ca. <strong>2 Wochen vor Abreise</strong> checken — September-Programme kommen oft kurzfristig raus:</p>
+        <ul>
+          <li>🎟️ <a href="https://shotgun.live/en/cities/cote-d-azur/techno" target="_blank">Shotgun — Côte d'Azur Techno</a></li>
+          <li>📅 <a href="https://www.eventbrite.fr/d/france--toulon/techno-club/" target="_blank">Eventbrite Toulon</a></li>
+          <li>📘 Facebook: "Toulon electro septembre 2026"</li>
+        </ul>
+        <div class="nightlife-hint" style="margin-top:12px;">🔮 Für echtes <strong>Psytrance</strong>: Marseille (~55 Min.) hat die aktivste Underground-Szene der ganzen Region.</div>
+      </div>
+    </div>
+
+    <!-- Change 7: id="card-viproom" -->
+    <div id="card-viproom" class="card">
+      <div class="card-header lila">⚠️ VIP Room Saint-Tropez</div>
+      <div class="card-body">
+        <p>Bekanntester Club der Riviera. House & Techno, internationale DJs, bis 6 Uhr. Aber: <strong>teuer + schließt meist Anfang September.</strong></p>
+        <span class="tag tag-lila">~45 Min. Fahrt</span>
+        <span class="tag tag-rot">Eher gehobenes Budget</span>
+        <br>
+        <div class="nightlife-hint">⚠️ Erste Septemberwoche meist noch offen — danach fraglich. Vorher prüfen!</div>
+        <br>
+        <a class="link-btn" href="https://ra.co/clubs/3924" target="_blank">🎵 Resident Advisor</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ACTION & SPASS — Change 6: id="sec-action" -->
+  <div id="sec-action" class="section-title">🎯 Action & Spaß — für alle 10 Tage</div>
+  <p style="margin-bottom:16px; color:#555; font-size:0.95em;">Alle Fahrtzeiten ab Pierrefeu-du-Var.</p>
+
+  <div class="card-grid">
+
+    <!-- Change 7: id="card-quad" -->
+    <div id="card-quad" class="card">
+      <div class="card-header sand">🏍️ Quad fahren — direkt nebenan!</div>
+      <div class="card-body">
+        <p><strong>Quad Var</strong> liegt direkt in Pierrefeu-du-Var — quasi vor eurer Haustür! Geführte Touren durch Weinberge und Waldwege im Massif des Maures.</p>
+        <ul>
+          <li>⏱️ 1 Stunde Tour: ~60–65 €</li>
+          <li>👶 Kinder ab 5 Jahren als Beifahrer möglich</li>
+          <li>🪖 Helm, Handschuhe inklusive</li>
+        </ul>
+        <span class="tag tag-gruen">Direkt in Pierrefeu!</span>
+        <span class="tag tag-orange">Führerschein nötig</span>
+        <br>
+        <a class="link-btn" href="https://www.google.com/maps/search/?api=1&query=Quad+Var+Pierrefeu-du-Var" target="_blank">📍 Google Maps</a>
+        <a class="link-btn" href="https://www.quad-var.fr" target="_blank">🏍️ Quad Var buchen</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header sand">⛳ Minigolf Le Lavandou</div>
+      <div class="card-body">
+        <p><strong>Mini Golf Exotique du Lavandou</strong> — direkt am Ort, 300 m vom Strand! 2 Kurse mit je 18 Löchern, Wasserfälle, Höhlen, Dschungel-Feeling.</p>
+        <ul>
+          <li>💶 Erwachsene: 12 € | Kinder: 7 €</li>
+          <li>☕ Café direkt dabei</li>
+          <li>🕓 Täglich 9:30–11 Uhr & 16–21 Uhr</li>
+        </ul>
+        <span class="tag tag-gruen">Direkt in Le Lavandou</span>
+        <span class="tag tag-blau">🚗 ~28 Min.</span>
+        <br>
+        <a class="link-btn" href="https://www.google.com/maps/search/?api=1&query=Mini+Golf+Exotique+Le+Lavandou" target="_blank">📍 Google Maps</a>
+        <a class="link-btn" href="https://www.minigolfdulavandou.com" target="_blank">⛳ Website</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header sand">🌊 Aqua Family — Wasserpark</div>
+      <div class="card-body">
+        <p>Wasserrutschen, Planschbecken, Schaumbassin in Hyères. Ideal für die 8-Jährigen!</p>
+        <ul>
+          <li>💶 18 € / Person | Kombi mit Kiddy Parc: 21,60 €</li>
+          <li>Ab 16 Uhr nur 12 €</li>
+        </ul>
+        <div class="nightlife-hint">⚠️ <strong>Saison: Mitte Juni – Ende August</strong> — im September möglicherweise geschlossen! Vorher prüfen.</div>
+        <span class="tag tag-blau">🚗 ~25 Min. (Hyères)</span>
+        <br>
+        <a class="link-btn" href="https://www.google.com/maps/search/?api=1&query=Aqua+Family+Hyeres" target="_blank">📍 Google Maps</a>
+        <a class="link-btn" href="https://www.aquafamily.fr" target="_blank">🌊 Website</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header sand">🎡 Aqualand Fréjus — großer Wasserpark</div>
+      <div class="card-body">
+        <p>19 Attraktionen auf 7 Hektar — u.a. angeblich größter Toboggan Europas (King Cobra, 51 km/h).</p>
+        <div class="nightlife-hint">⚠️ Saisonal — im September oft schon geschlossen. Unbedingt vorher prüfen!</div>
+        <span class="tag tag-orange">🚗 ~55 Min. (Fréjus)</span>
+        <span class="tag tag-lila">Größter Park der Region</span>
+        <br>
+        <a class="link-btn" href="https://www.aqualand.fr/frejus" target="_blank">🎡 Aqualand</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header sand">🧗 Kletterpark im Wald</div>
+      <div class="card-body">
+        <p><strong>Ecopark de La Castille</strong> — Kletterpark mit Kinderparcours, mitten im Wald. Toll für 8-Jährige!</p>
+        <ul>
+          <li>📍 La Crau (zwischen Pierrefeu und Hyères)</li>
+          <li>⏱️ Parcours für verschiedene Schwierigkeitsgrade</li>
+        </ul>
+        <span class="tag tag-gruen">Perfekt für Kids</span>
+        <span class="tag tag-blau">🚗 ~20 Min.</span>
+        <br>
+        <a href="https://www.google.com/maps/search/?api=1&query=Ecopark+de+La+Castille+La+Crau+France" target="_blank" class="link-btn">📍 Google Maps</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header sand">🦘 Bungee — Pont de l'Artuby</div>
+      <div class="card-body">
+        <p>Europas höchste Bungee-Brücke: <strong>182 Meter</strong> über den Gorges du Verdon. Für die Mutigen unter den Erwachsenen!</p>
+        <ul>
+          <li>💶 ab 140 € / Person</li>
+          <li>👶 Nicht für Kinder geeignet</li>
+          <li>Vorabbuchen unbedingt nötig</li>
+        </ul>
+        <span class="tag tag-rot">Nur Erwachsene</span>
+        <span class="tag tag-orange">🚗 ~1,5 Std.</span>
+        <br>
+        <a class="link-btn" href="https://www.manawa.com/en-GB/activity/france/verdon-gorge/bungee-jumping/bungee-jumping-from-artuby-bridge-182m-in-verdon/2100" target="_blank">🦘 Buchen</a>
+        <a class="link-btn" href="https://www.google.com/maps/search/?api=1&query=Pont+de+l%27Artuby+Gorges+du+Verdon" target="_blank">📍 Google Maps</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MUST-SEE & PRAKTISCHES -->
+  <div id="sec-mustsee" class="section-title">📌 Must-See & Was ihr noch wissen solltet</div>
+
+  <div class="card-grid">
+
+    <div class="card">
+      <div class="card-header blau">⭐ Absolute Must-Sees</div>
+      <div class="card-body">
+        <ul>
+          <li>🏝️ <strong>Port-Cros Unterwasserpfad</strong> — einmalig, Pflicht</li>
+          <li>🌅 <strong>Sonnenuntergang vom Col de Babaou</strong> — atemberaubend, kostenlos</li>
+          <li>🐢 <strong>Schildkröten im Wald</strong> — unvergesslich für die Kids</li>
+          <li>🌺 <strong>Abendspaziergang in Bormes-les-Mimosas</strong> — die schönsten Gassen der Provence</li>
+          <li>🍷 <strong>Markt in Le Lavandou</strong> (Di & Sa) — Oliven, Käse, Lavendel kaufen</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header sand">🏖️ Liegestühle am Strand</div>
+      <div class="card-body">
+        <p>An den Hauptstränden gibt es Liegestühle und Sonnenschirme zu mieten — aber nicht überall!</p>
+        <ul>
+          <li>💶 Typisch: 10–20 € / Tag pro Liege (+ Schirm)</li>
+          <li>✅ Viele Strände in Le Lavandou sind komplett <strong>kostenlos und frei</strong></li>
+          <li>🏖️ Plage de Saint-Clair & Aiguebelle: Liegestühle mietbar</li>
+          <li>🏝️ Crique de Jean Blanc, L'Estagnol: wild, keine Liegen — eigene Matte mitbringen!</li>
+        </ul>
+        <span class="tag tag-gruen">Öffentliche Strände sind kostenlos</span>
+        <span class="tag tag-orange">Liegenmiete optional</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header rot">🚗 Parken — wichtig!</div>
+      <div class="card-body">
+        <ul>
+          <li>🅿️ <strong>Le Lavandou</strong>: Parkplätze vorhanden, im September deutlich entspannter als August. Kostenpflichtig im Zentrum (Parkuhr).</li>
+          <li>🟦 <strong>Blaue Zone (Zone Bleue)</strong>: Braucht eine Parkscheibe (Disque de stationnement) — kostenlos im Supermarkt!</li>
+          <li>⚠️ <strong>Saint-Tropez</strong>: Parken ein Alptraum + teuer → Park & Ride nutzen!</li>
+          <li>🌲 <strong>Wald / Crique</strong>: Kleine Schotterparkplätze, oft kostenlos</li>
+          <li>💶 <strong>Maut (Autoroute)</strong>: Frankreich hat viele Mautstrecken! Kleingeld oder Karte bereithalten. Von München ca. 30–40 € Maut.</li>
+        </ul>
+        <span class="tag tag-rot">Parkscheibe mitnehmen!</span>
+        <span class="tag tag-orange">Maut einplanen</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">🇫🇷 Regionale Eigenheiten</div>
+      <div class="card-body">
+        <ul>
+          <li>🛍️ <strong>Mittagspause!</strong> Viele Läden schließen 12–14 Uhr — Einkauf vorher erledigen</li>
+          <li>🍽️ <strong>Restaurants</strong>: Küche oft erst ab 19:30 Uhr, nicht früher</li>
+          <li>👋 <strong>Bonjour!</strong> Immer beim Betreten eines Ladens grüßen — sonst gilt man als unhöflich</li>
+          <li>🔥 <strong>Waldbrandgefahr</strong>: Im September manchmal gesperrte Waldwege prüfen (Arrêtés Préfectoraux)</li>
+          <li>💨 <strong>Mistral</strong>: Starker Nordwind kann plötzlich aufkommen — Sonnenschirm festhalten!</li>
+          <li>🩱 <strong>Oben-ohne</strong>: An französischen Stränden normal und akzeptiert</li>
+          <li>🚦 <strong>Kreisverkehr</strong>: Wer im Kreisverkehr ist, hat Vorfahrt (außer bei alten mit Vorfahrtsschildern)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header teal">💡 Daran denkt man oft nicht...</div>
+      <div class="card-body">
+        <ul>
+          <li>🩺 <strong>EHIC-Karte</strong> (Europäische Krankenversicherungskarte) mitnehmen — kostenlose EU-Gesundheitsversorgung</li>
+          <li>🔌 <strong>Kein Adapter nötig</strong> — Frankreich hat dieselben Stecker wie Deutschland</li>
+          <li>📱 <strong>Offline-Karten</strong> laden (Google Maps / Maps.me) — auf der Insel gibt's kein Netz</li>
+          <li>🧴 <strong>Sonnencreme</strong>: Viel mitbringen — im Supermarkt teuer</li>
+          <li>💧 <strong>Wasserflaschen</strong>: Hitze im September, Kinder trinken viel</li>
+          <li>🐢 <strong>Schildkröten NICHT anfassen</strong> — Naturschutzgebiet, Bußgeld möglich</li>
+          <li>🚗 <strong>Warnweste + Warndreieck</strong>: In Frankreich gesetzlich Pflicht im Auto!</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TAGES-COMBOS -->
+  <div id="sec-combos" class="section-title">📅 Tages-Combos — was gut zusammenpasst</div>
+  <p style="margin-bottom:16px; color:#555; font-size:0.95em;">Aktivität + Essen + Abend — fertig geplant.</p>
+
+  <div class="card-grid">
+
+    <div class="card">
+      <div class="card-header blau">🏝️ Inseltag</div>
+      <div class="card-body">
+        <p><strong>Morgens:</strong> Fähre nach Port-Cros (früh starten!) → Schnorcheln am Unterwasserpfad → Insel erkunden</p>
+        <p><strong>Abends zurück:</strong> Abendessen bei <strong>Coco Beach – La Fossette</strong> direkt am Wasser</p>
+        <p><strong>Danach:</strong> Cocktail bei <strong>Le Tam-Tam Beach Bar</strong>, Sonnenuntergang</p>
+        <span class="tag tag-blau">Port-Cros Fähre früh buchen!</span>
+        <span class="tag tag-orange">Ganztages-Trip</span>
+        <br>
+        <a class="link-btn" href="https://www.google.com/maps/dir/Pierrefeu-du-Var/Gare+Maritime+Le+Lavandou/Coco+Beach+La+Fossette+Le+Lavandou" target="_blank">🗺️ Route öffnen</a>
+      </div>
+    </div>
+
+    <!-- Change 9: Waldtag — Google Maps route link -->
+    <div class="card">
+      <div class="card-header gruen">🌲 Waldtag</div>
+      <div class="card-body">
+        <p><strong>Vormittags:</strong> Schildkröten suchen bei Collobrières oder La Garde-Freinet (Kids ausrasten lassen!)</p>
+        <p><strong>Mittags:</strong> Essen in <strong>Collobrières</strong> — Kastanien-Spezialitäten, im Fluss plantschen</p>
+        <p><strong>Nachmittags:</strong> Chartreuse de la Verne (Kloster im Wald) oder Col de Babaou (Panorama)</p>
+        <p><strong>Abends:</strong> <strong>Gaïa Natural Food</strong> in Hyères (vegetarisch, Weltküche)</p>
+        <span class="tag tag-gruen">Perfekt für Kids</span>
+        <span class="tag tag-orange">~25–30 Min. Fahrt</span>
+        <br>
+        <a href="https://www.google.com/maps/dir/Pierrefeu-du-Var/Collobrieres+France/Chartreuse+de+la+Verne+Var" target="_blank" class="link-btn">🗺️ Google Maps Route</a>
+      </div>
+    </div>
+
+    <!-- Change 9: Strandtag — Google Maps route link -->
+    <div class="card">
+      <div class="card-header teal">🏖️ Strandtag mit Geheimbucht</div>
+      <div class="card-body">
+        <p><strong>Morgens:</strong> Plage d'Aiguebelle — Schnorcheln & Baden</p>
+        <p><strong>Mittags:</strong> Picknick von <strong>Tout Va Bio</strong> (vorher kaufen!) direkt am Strand</p>
+        <p><strong>Nachmittags:</strong> Crique de Jean Blanc — die Geheimbucht (~100 Stufen), ganz für euch</p>
+        <p><strong>Abends:</strong> Pizza bei <strong>La Pizzeria du Port</strong> am Hafen</p>
+        <span class="tag tag-blau">Kein Fahren nötig</span>
+        <span class="tag tag-gruen">Entspanntester Tag</span>
+        <br>
+        <a href="https://www.google.com/maps/dir/Pierrefeu-du-Var/Plage+d'Aiguebelle+Le+Lavandou/Crique+de+Jean+Blanc+Le+Lavandou" target="_blank" class="link-btn">🗺️ Google Maps Route</a>
+      </div>
+    </div>
+
+    <!-- Change 9: Porquerolles day — Google Maps route link -->
+    <div class="card">
+      <div class="card-header sand">⛵ Ausflugstag Porquerolles</div>
+      <div class="card-body">
+        <p><strong>Morgens:</strong> Fahrt nach Hyères → Fähre nach Île de Porquerolles</p>
+        <p><strong>Auf der Insel:</strong> Fahrräder leihen → Plage d'Argent → Schnorcheln in Naturbuchten → Picknick</p>
+        <p><strong>Abends zurück:</strong> Abendessen in Hyères bei <strong>Gaïa Natural Food</strong></p>
+        <span class="tag tag-orange">Fähre ab Hyères ~20€</span>
+        <span class="tag tag-lila">Karibik-Feeling!</span>
+        <br>
+        <a href="https://www.google.com/maps/dir/Pierrefeu-du-Var/Port+de+Giens+Hyeres/Gaia+Natural+Food+Hyeres" target="_blank" class="link-btn">🗺️ Google Maps Route</a>
+      </div>
+    </div>
+
+    <!-- Change 9: Eltern-Abend — Google Maps route link -->
+    <div class="card">
+      <div class="card-header lila">🎵 Eltern-Abend</div>
+      <div class="card-body">
+        <p><strong>Früher Abend:</strong> Aperitif bei <strong>Bar du Port</strong> am Hafen (Kids dabei ok!)</p>
+        <p><strong>Abendessen:</strong> <strong>Coco Beach</strong> oder <strong>Le Bistr'Eau Ryon</strong> am Strand Saint-Clair · <a href="https://www.google.com/maps/search/?api=1&query=Le+Bistrea+Ryon+Saint-Clair+Le+Lavandou" target="_blank" style="color:#1a6fa8;">📍 Maps</a></p>
+        <p><strong>Später (Kids schlafen):</strong> <strong>Le Tam-Tam</strong> DJ-Abend oder Fahrt nach Toulon für Electronic Bar</p>
+        <span class="tag tag-lila">Babysitter-Abend</span>
+        <span class="tag tag-orange">Toulon ~35 Min.</span>
+        <br>
+        <a href="https://www.google.com/maps/dir/Pierrefeu-du-Var/Bar+du+Port+Le+Lavandou/Le+Tam+Tam+Le+Lavandou" target="_blank" class="link-btn">🗺️ Google Maps Route</a>
+      </div>
+    </div>
+
+    <!-- Change 9: Calanques — Google Maps route link -->
+    <div class="card">
+      <div class="card-header teal">🌊 Calanques-Tag</div>
+      <div class="card-body">
+        <p><strong>Morgens:</strong> Fahrt nach Cassis (~55 Min.)</p>
+        <p><strong>Mittags:</strong> Bootsfahrt zu den Calanques + Schnorcheln unter weißen Kalkfelsen</p>
+        <p><strong>Nachmittags:</strong> Cassis Hafen bummeln, Eis essen</p>
+        <p><strong>Abends zurück:</strong> Grillen zuhause oder Pizza am Hafen</p>
+        <span class="tag tag-orange">~55 Min. Fahrt</span>
+        <span class="tag tag-blau">Spektakulär!</span>
+        <br>
+        <a href="https://www.google.com/maps/dir/Pierrefeu-du-Var/Calanques+Cassis+France" target="_blank" class="link-btn">🗺️ Google Maps Route</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- EINKAUFEN -->
+  <div id="sec-einkaufen" class="section-title">🛒 Einkaufen vor Ort</div>
+
+  <div class="card-grid">
+
+    <div class="card">
+      <div class="card-header sand">🏪 Supermärkte in Le Lavandou</div>
+      <div class="card-body">
+        <ul>
+          <li>🟠 <strong>Intermarché</strong> — größter Supermarkt direkt in Le Lavandou, gute Auswahl, Frischetheke</li>
+          <li>🔵 <strong>Casino / Vival</strong> — kleinere Märkte im Ort, praktisch für tägliche Besorgungen</li>
+          <li>🟡 <strong>Carrefour City</strong> — im Ortszentrum, bequem zu Fuß erreichbar</li>
+        </ul>
+        <span class="tag tag-orange">Alle direkt in Le Lavandou</span>
+        <span class="tag tag-lila">🚗 ~27–30 Min. von Pierrefeu</span>
+      </div>
+    </div>
+
+
+    <div class="card">
+      <div class="card-header sand">🥖 Frisches & Markt</div>
+      <div class="card-body">
+        <ul>
+          <li>🥐 <strong>Boulangerie</strong> — Bäckerei morgens, Baguette & Croissants. In Le Lavandou mind. 3 Stück</li>
+          <li>🧅 <strong>Wochenmarkt Le Lavandou</strong> — Di & Sa morgens, frisches Gemüse, Käse, Oliven, Lavendel</li>
+          <li>🫒 <strong>Marché de Bormes-les-Mimosas</strong> — Mi morgens, sehr gemütlich, lokale Produkte · <a href="https://www.google.com/maps/search/?api=1&query=Marche+Bormes+les+Mimosas" target="_blank" style="color:#1a6fa8;">📍 Maps</a></li>
+        </ul>
+        <span class="tag tag-gruen">Markt Di & Sa in Le Lavandou</span>
+        <span class="tag tag-blau">Bormes Mi morgens</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header sand">🤿 Schnorchelausrüstung kaufen</div>
+      <div class="card-body">
+        <p>Am besten gleich im Intermarché oder Decathlon kaufen — <strong>billiger als leihen</strong>, man hat es die ganze Zeit dabei.</p>
+        <ul>
+          <li>🏪 <strong>Decathlon Hyères</strong> — beste Auswahl, ~25 Min. Fahrt</li>
+          <li>🏖️ Strandläden in Le Lavandou — teurer, aber vor Ort verfügbar</li>
+        </ul>
+        <span class="tag tag-blau">Empfehlung: vor Abreise kaufen oder Decathlon Hyères</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TIPPS -->
+  <div class="tipp-box">
+    <h3>💡 Praktische Tipps</h3>
+    <ul>
+      <li>🚢 <strong>Port-Cros Fähre</strong> am besten früh morgens buchen — im September noch gut verfügbar</li>
+      <li>🍽️ <strong>Restaurants reservieren</strong> — auch September ist die Region beliebt</li>
+      <li>🤿 <strong>Schnorchelausrüstung</strong> im Supermarkt vor Ort kaufen (billiger als leihen)</li>
+      <li>🎵 <strong>Nightlife:</strong> ~2 Wochen vorher auf Shotgun Events checken</li>
+      <li>🏝️ <strong>Crique de Jean Blanc:</strong> früh hinfahren für euren eigenen Strand!</li>
+      <li>🌿 <strong>HappyCow-App</strong> runterladen — zeigt veggie Restaurants in der Nähe</li>
+    </ul>
+  </div>
+
+  <!-- NÜTZLICHE NUMMERN -->
+  <div id="sec-notfall" class="section-title">📞 Nützliche Nummern & Infos</div>
+
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-header rot">🚨 Notfall & Gesundheit</div>
+      <div class="card-body">
+        <ul>
+          <li>🚑 <strong>Europäischer Notruf:</strong> 112</li>
+          <li>👮 <strong>Polizei Frankreich:</strong> 17</li>
+          <li>🚒 <strong>Feuerwehr:</strong> 18</li>
+          <li>🏥 <strong>Nächstes Krankenhaus:</strong> Hôpital de Gassin / Saint-Tropez (~30 Min.)</li>
+          <li>💊 <strong>Apotheke Le Lavandou:</strong> Pharmacie du Centre, Place du Marché</li>
+          <li>🩺 <strong>Notzahnarzt:</strong> SOS Dentiste → Google Maps suchen</li>
+        </ul>
+        <span class="tag tag-rot">112 immer merken!</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header gruen">🚗 Anreise & Orientierung</div>
+      <div class="card-body">
+        <ul>
+          <li>📍 <strong>Pierrefeu-du-Var → Le Lavandou:</strong> ~25 Min. (D12 / D559)</li>
+          <li>🚗 <strong>Von München:</strong> ~10–11h (A8/A52/A50 · ~30–40€ Maut)</li>
+          <li>⛴️ <strong>Fähre Port-Cros:</strong> ab Port du Lavandou · ~35 Min. · ca. 17€ p.P.</li>
+          <li>⛴️ <strong>Fähre Porquerolles:</strong> ab Port de Giens (Hyères) · ~20 Min. · ca. 20€ p.P.</li>
+          <li>🅿️ <strong>Parken Le Lavandou:</strong> Im September entspannt — Parkscheibe (Disque) mitnehmen!</li>
+        </ul>
+        <a href="https://www.google.com/maps/dir/M%C3%BCnchen/Pierrefeu-du-Var" target="_blank" class="link-btn">🗺️ Route München → Pierrefeu</a>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+
+<script>
+var map = L.map('map').setView([43.13, 6.38], 11);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+  attribution: '© OpenStreetMap contributors © CARTO', maxZoom: 19
+}).addTo(map);
+
+/* Change 8: updated pin function with darker border */
+function pin(emoji, color) {
+  return L.divIcon({
+    html: '<div style="background:'+color+';border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:17px;box-shadow:0 2px 8px rgba(0,0,0,0.35);border:2px solid rgba(0,0,0,0.15);">'+emoji+'</div>',
+    className:'', iconSize:[34,34], iconAnchor:[17,17], popupAnchor:[0,-17]
+  });
+}
+
+var spots = [
+  { lat:43.2244, lng:6.1453, e:'🏡', c:'#e87c2b', t:'🏡 Euer Haus', d:'Pierrefeu-du-Var' },
+  { lat:43.1386, lng:6.3683, e:'🌊', c:'#1a6fa8', t:'🌊 Le Lavandou', d:'12 Strände · Basis für alles', a:'#sec-straende' },
+  { lat:43.0101, lng:6.3819, e:'⭐', c:'#0097a7', t:'⭐ Port-Cros', d:'Unterwasser-Nationalpark · Fähre ~17€', a:'#card-portcros' },
+  { lat:43.1352, lng:6.3648, e:'🏝️', c:'#00695c', t:'🏝️ Crique Jean Blanc', d:'Geheimbucht · ~100 Stufen', a:'#sec-bucht' },
+  { lat:43.1491, lng:6.4023, e:'🏖️', c:'#1a6fa8', t:'🏖️ Plage d\'Aiguebelle', d:'Bester Schnorchel-Strand', a:'#sec-straende' },
+  { lat:43.1416, lng:6.3817, e:'🏖️', c:'#1a6fa8', t:'🏖️ Plage de Saint-Clair', d:'Ideal für Kinder · flach & sicher', a:'#sec-straende' },
+  { lat:43.1514, lng:6.4320, e:'🏖️', c:'#0097a7', t:'🏖️ Plage du Cavalière', d:'Ruhig · türkises Wasser', a:'#sec-straende' },
+  { lat:43.1268, lng:6.3962, e:'🏖️', c:'#0097a7', t:'🏖️ Pramousquier', d:'Familiär · gutes Schnorcheln', a:'#sec-straende' },
+  { lat:43.1454, lng:6.3951, e:'🏖️', c:'#0097a7', t:'🏖️ La Fossette', d:'Geschützte Bucht · Coco Beach dabei', a:'#sec-straende' },
+  { lat:43.1092, lng:6.4173, e:'🏖️', c:'#0097a7', t:'🏖️ L\'Estagnol', d:'Naturbelassen · wenig Touristen', a:'#sec-straende' },
+  { lat:43.1507, lng:6.3419, e:'🏘️', c:'#7b5ea7', t:'🏘️ Bormes-les-Mimosas', d:'Schönstes Dorf der Region', a:'#sec-wald' },
+  { lat:43.2360, lng:6.3120, e:'🌰', c:'#5d4037', t:'🌰 Collobrières', d:'Kastaniendorf · Fluss zum Plantschen', a:'#card-collobrieres' },
+  { lat:43.2356, lng:6.4013, e:'🏰', c:'#5d4037', t:'🏰 Chartreuse de la Verne', d:'Mittelalterliches Kloster im Wald', a:'#card-chartreuse' },
+  { lat:43.2042, lng:6.3043, e:'🏔️', c:'#5d4037', t:'🏔️ Col de Babaou', d:'Panorama · Meer & Inseln', a:'#card-babaou' },
+  { lat:43.1199, lng:6.1316, e:'🥗', c:'#2e7d32', t:'🥗 Gaïa Hyères', d:'Vegetarisches Restaurant', a:'#card-gaia' },
+  { lat:42.9933, lng:6.2083, e:'⛵', c:'#0097a7', t:'⛵ Porquerolles', d:'Schönste Insel Frankreichs', a:'#card-porquerolles' },
+  { lat:43.2726, lng:6.6408, e:'🎧', c:'#7b5ea7', t:'🎧 VIP Room Saint-Tropez', d:'House & Techno · ⚠️ Sept. prüfen', a:'#card-viproom' },
+  { lat:43.2260, lng:6.1470, e:'🏍️', c:'#c62828', t:'🏍️ Quad Var', d:'Pierrefeu-du-Var · Abenteuer für die ganze Familie!', a:'#card-quad' }
+];
+
+spots.forEach(function(s) {
+  var popup = '<strong>'+s.t+'</strong><br>'+s.d;
+  if(s.a) {
+    var id = s.a.substring(1);
+    popup += '<br><a href="#" onclick="goTo(\''+id+'\'); return false;" style="color:#1a6fa8;font-weight:600;font-size:0.88em;">↓ Details ansehen</a>';
+  }
+  L.marker([s.lat, s.lng], { icon: pin(s.e, s.c) }).addTo(map).bindPopup(popup, { maxWidth:200 });
+});
+</script>
+
+<!-- Change 10: Live Weather JavaScript -->
+<script>
+(function() {
+  var codes = {0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌦️',55:'🌧️',
+    61:'🌧️',63:'🌧️',65:'🌧️',71:'🌨️',73:'🌨️',75:'🌨️',80:'🌦️',81:'🌧️',95:'⛈️'};
+  fetch('https://api.open-meteo.com/v1/forecast?latitude=43.14&longitude=6.37&current=temperature_2m,weather_code,wind_speed_10m,relative_humidity_2m&timezone=Europe%2FParis')
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      var c = d.current;
+      var emoji = codes[c.weather_code] || '🌡️';
+      var el = document.getElementById('wetter-live');
+      if(el) el.innerHTML = '📡 <strong>Aktuell in Le Lavandou:</strong> ' + emoji + ' '
+        + Math.round(c.temperature_2m) + '°C · 💨 ' + Math.round(c.wind_speed_10m) + ' km/h'
+        + ' · 💧 ' + c.relative_humidity_2m + '% Luftfeuchtigkeit';
+    })
+    .catch(function(){ var el = document.getElementById('wetter-live'); if(el) el.innerHTML = ''; });
+})();
+</script>
+
+<!-- Accordion + goTo JavaScript -->
+<script>
+// Globale Funktion für Karten-Popup-Links (mobil-kompatibel)
+window.goTo = function(id) {
+  var target = document.getElementById(id);
+  if(!target) return;
+  if(target.classList.contains('section-title') && target._body && !target._body.classList.contains('open')) {
+    target._body.classList.add('open');
+    if(target._arrow) target._arrow.textContent = '▼';
+  } else {
+    var el = target.parentElement;
+    while(el && el !== document.body) {
+      if(el.classList && el.classList.contains('section-body') && !el.classList.contains('open')) {
+        el.classList.add('open');
+        var t = el.previousElementSibling;
+        if(t && t._arrow) t._arrow.textContent = '▼';
+        break;
+      }
+      el = el.parentElement;
+    }
+  }
+  setTimeout(function() { target.scrollIntoView({ behavior:'smooth', block:'start' }); }, 80);
+};
+
+(function() {
+  var titles = Array.from(document.querySelectorAll('.section-title'));
+  titles.forEach(function(title, i) {
+    if(i === 0) return; // Karte immer sichtbar
+    var content = [];
+    var next = title.nextElementSibling;
+    while(next && !next.classList.contains('section-title')) {
+      content.push(next); next = next.nextElementSibling;
+    }
+    if(content.length === 0) return;
+    var body = document.createElement('div');
+    body.className = 'section-body';
+    title.parentNode.insertBefore(body, content[0]);
+    content.forEach(function(el) { body.appendChild(el); });
+    var arrow = document.createElement('span');
+    arrow.className = 'sec-arrow'; arrow.textContent = '▶';
+    title.appendChild(arrow); title.classList.add('collapsible');
+    title._body = body; title._arrow = arrow;
+    // Standardmäßig eingeklappt — kein 'open' class = max-height: 0
+    title.addEventListener('click', function() {
+      var open = body.classList.contains('open');
+      if(open) { body.classList.remove('open'); arrow.textContent = '▶'; }
+      else { body.classList.add('open'); arrow.textContent = '▼'; }
+    });
+  });
+  // Map popup anchor link handler
+  document.addEventListener('click', function(e) {
+    var link = e.target;
+    while(link && link.tagName !== 'A') link = link.parentElement;
+    if(!link) return;
+    var href = link.getAttribute('href');
+    if(!href || href[0] !== '#') return;
+    var targetId = href.substring(1);
+    var target = document.getElementById(targetId);
+    if(!target) return;
+    var needsScroll = false;
+    if(target.classList.contains('section-title') && target._body) {
+      if(!target._body.classList.contains('open')) { target._body.classList.add('open'); target._arrow.textContent = '▼'; }
+      needsScroll = true;
+    } else {
+      var el = target.parentElement;
+      while(el && el !== document.body) {
+        if(el.classList && el.classList.contains('section-body') && !el.classList.contains('open')) {
+          el.classList.add('open'); var t = el.previousElementSibling;
+          if(t && t._arrow) t._arrow.textContent = '▼'; needsScroll = true; break;
+        }
+        el = el.parentElement;
+      }
+    }
+    if(needsScroll) { e.preventDefault(); setTimeout(function() { target.scrollIntoView({ behavior:'smooth', block:'start' }); }, 30); }
+  });
+})();
+</script>
+<button id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Nach oben">↑</button>
+
+<script>
+window.addEventListener('scroll', function() {
+  var btn = document.getElementById('back-to-top');
+  if(btn) btn.classList.toggle('visible', window.scrollY > 300);
+});
+</script>
+
+</body>
+</html>
