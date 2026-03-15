@@ -1183,33 +1183,33 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r
   attribution: '© OpenStreetMap contributors © CARTO', maxZoom: 19
 }).addTo(map);
 
-/* Change 8: updated pin function with darker border */
+/* pin: iconSize [0,0] + CSS translate verhindert Pixel-Sprung beim Zoomen */
 function pin(emoji, color) {
   return L.divIcon({
-    html: '<div style="background:'+color+';border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:17px;box-shadow:0 2px 8px rgba(0,0,0,0.35);border:2px solid rgba(0,0,0,0.15);">'+emoji+'</div>',
-    className:'', iconSize:[34,34], iconAnchor:[17,17], popupAnchor:[0,-17]
+    html: '<div style="position:absolute;transform:translate(-50%,-50%);background:'+color+';border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:17px;box-shadow:0 2px 8px rgba(0,0,0,0.35);border:2px solid rgba(0,0,0,0.15);will-change:transform;">'+emoji+'</div>',
+    className:'', iconSize:[0,0], iconAnchor:[0,0], popupAnchor:[0,-17]
   });
 }
 
 var spots = [
-  { lat:43.2244, lng:6.1453, e:'🏡', c:'#e87c2b', t:'🏡 Euer Haus', d:'Pierrefeu-du-Var' },
-  { lat:43.1386, lng:6.3683, e:'🌊', c:'#1a6fa8', t:'🌊 Le Lavandou', d:'12 Strände · Basis für alles', a:'#sec-straende' },
-  { lat:43.0101, lng:6.3819, e:'⭐', c:'#0097a7', t:'⭐ Port-Cros', d:'Unterwasser-Nationalpark · Fähre ~17€', a:'#card-portcros' },
-  { lat:43.1352, lng:6.3648, e:'🏝️', c:'#00695c', t:'🏝️ Crique Jean Blanc', d:'Geheimbucht · ~100 Stufen', a:'#sec-bucht' },
-  { lat:43.1491, lng:6.4023, e:'🏖️', c:'#1a6fa8', t:'🏖️ Plage d\'Aiguebelle', d:'Bester Schnorchel-Strand', a:'#sec-straende' },
-  { lat:43.1416, lng:6.3817, e:'🏖️', c:'#1a6fa8', t:'🏖️ Plage de Saint-Clair', d:'Ideal für Kinder · flach & sicher', a:'#sec-straende' },
-  { lat:43.1514, lng:6.4320, e:'🏖️', c:'#0097a7', t:'🏖️ Plage du Cavalière', d:'Ruhig · türkises Wasser', a:'#sec-straende' },
-  { lat:43.1268, lng:6.3962, e:'🏖️', c:'#0097a7', t:'🏖️ Pramousquier', d:'Familiär · gutes Schnorcheln', a:'#sec-straende' },
-  { lat:43.1454, lng:6.3951, e:'🏖️', c:'#0097a7', t:'🏖️ La Fossette', d:'Geschützte Bucht · Coco Beach dabei', a:'#sec-straende' },
-  { lat:43.1092, lng:6.4173, e:'🏖️', c:'#0097a7', t:'🏖️ L\'Estagnol', d:'Naturbelassen · wenig Touristen', a:'#sec-straende' },
-  { lat:43.1507, lng:6.3419, e:'🏘️', c:'#7b5ea7', t:'🏘️ Bormes-les-Mimosas', d:'Schönstes Dorf der Region', a:'#sec-wald' },
-  { lat:43.2360, lng:6.3120, e:'🌰', c:'#5d4037', t:'🌰 Collobrières', d:'Kastaniendorf · Fluss zum Plantschen', a:'#card-collobrieres' },
-  { lat:43.2356, lng:6.4013, e:'🏰', c:'#5d4037', t:'🏰 Chartreuse de la Verne', d:'Mittelalterliches Kloster im Wald', a:'#card-chartreuse' },
-  { lat:43.2042, lng:6.3043, e:'🏔️', c:'#5d4037', t:'🏔️ Col de Babaou', d:'Panorama · Meer & Inseln', a:'#card-babaou' },
-  { lat:43.1199, lng:6.1316, e:'🥗', c:'#2e7d32', t:'🥗 Gaïa Hyères', d:'Vegetarisches Restaurant', a:'#card-gaia' },
-  { lat:42.9933, lng:6.2083, e:'⛵', c:'#0097a7', t:'⛵ Porquerolles', d:'Schönste Insel Frankreichs', a:'#card-porquerolles' },
-  { lat:43.2726, lng:6.6408, e:'🎧', c:'#7b5ea7', t:'🎧 VIP Room Saint-Tropez', d:'House & Techno · ⚠️ Sept. prüfen', a:'#card-viproom' },
-  { lat:43.2260, lng:6.1470, e:'🏍️', c:'#c62828', t:'🏍️ Quad Var', d:'Pierrefeu-du-Var · Abenteuer für die ganze Familie!', a:'#card-quad' }
+  { lat:43.2239, lng:6.1464, e:'🏡', c:'#e87c2b', t:'🏡 Euer Haus', d:'Pierrefeu-du-Var' },
+  { lat:43.1383, lng:6.3679, e:'🌊', c:'#1a6fa8', t:'🌊 Le Lavandou', d:'12 Strände · Basis für alles', a:'#sec-straende' },
+  { lat:43.0012, lng:6.3997, e:'⭐', c:'#0097a7', t:'⭐ Port-Cros', d:'Unterwasser-Nationalpark · Fähre ~17€', a:'#card-portcros' },
+  { lat:43.1219, lng:6.3924, e:'🏝️', c:'#00695c', t:'🏝️ Crique Jean Blanc', d:'Geheimbucht · ~100 Stufen', a:'#sec-bucht' },
+  { lat:43.1481, lng:6.4102, e:'🏖️', c:'#1a6fa8', t:'🏖️ Plage d\'Aiguebelle', d:'Bester Schnorchel-Strand', a:'#sec-straende' },
+  { lat:43.1420, lng:6.3877, e:'🏖️', c:'#1a6fa8', t:'🏖️ Plage de Saint-Clair', d:'Ideal für Kinder · flach & sicher', a:'#sec-straende' },
+  { lat:43.1698, lng:6.4621, e:'🏖️', c:'#0097a7', t:'🏖️ Plage du Cavalière', d:'Ruhig · türkises Wasser', a:'#sec-straende' },
+  { lat:43.1201, lng:6.4002, e:'🏖️', c:'#0097a7', t:'🏖️ Pramousquier', d:'Familiär · gutes Schnorcheln', a:'#sec-straende' },
+  { lat:43.1456, lng:6.3922, e:'🏖️', c:'#0097a7', t:'🏖️ La Fossette', d:'Geschützte Bucht · Coco Beach dabei', a:'#sec-straende' },
+  { lat:43.1073, lng:6.4229, e:'🏖️', c:'#0097a7', t:'🏖️ L\'Estagnol', d:'Naturbelassen · wenig Touristen', a:'#sec-straende' },
+  { lat:43.1508, lng:6.3376, e:'🏘️', c:'#7b5ea7', t:'🏘️ Bormes-les-Mimosas', d:'Schönstes Dorf der Region', a:'#sec-wald' },
+  { lat:43.2476, lng:6.2965, e:'🌰', c:'#5d4037', t:'🌰 Collobrières', d:'Kastaniendorf · Fluss zum Plantschen', a:'#card-collobrieres' },
+  { lat:43.2633, lng:6.3733, e:'🏰', c:'#5d4037', t:'🏰 Chartreuse de la Verne', d:'Mittelalterliches Kloster im Wald', a:'#card-chartreuse' },
+  { lat:43.2059, lng:6.3248, e:'🏔️', c:'#5d4037', t:'🏔️ Col de Babaou', d:'Panorama · Meer & Inseln', a:'#card-babaou' },
+  { lat:43.1194, lng:6.1308, e:'🥗', c:'#2e7d32', t:'🥗 Gaïa Hyères', d:'Vegetarisches Restaurant', a:'#card-gaia' },
+  { lat:43.0012, lng:6.2040, e:'⛵', c:'#0097a7', t:'⛵ Porquerolles', d:'Schönste Insel Frankreichs', a:'#card-porquerolles' },
+  { lat:43.2723, lng:6.6401, e:'🎧', c:'#7b5ea7', t:'🎧 VIP Room Saint-Tropez', d:'House & Techno · ⚠️ Sept. prüfen', a:'#card-viproom' },
+  { lat:43.2255, lng:6.1465, e:'🏍️', c:'#c62828', t:'🏍️ Quad Var', d:'Pierrefeu-du-Var · Abenteuer für die ganze Familie!', a:'#card-quad' }
 ];
 
 spots.forEach(function(s) {
