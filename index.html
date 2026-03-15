@@ -229,17 +229,16 @@
   #main-nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
     background: linear-gradient(135deg, #1a6fa8, #0097a7);
-    display: flex; gap: 0; overflow-x: auto; scrollbar-width: none;
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 0;
     box-shadow: 0 2px 8px rgba(0,0,0,0.2);
   }
-  #main-nav::-webkit-scrollbar { display: none; }
   #main-nav a {
-    color: white; text-decoration: none; padding: 10px 14px;
-    font-size: 0.82em; font-weight: 600; white-space: nowrap;
+    color: white; text-decoration: none; padding: 7px 10px;
+    font-size: 0.78em; font-weight: 600; white-space: nowrap;
     opacity: 0.85; transition: opacity 0.2s, background 0.2s;
   }
   #main-nav a:hover { opacity: 1; background: rgba(255,255,255,0.15); }
-  body { padding-top: 40px; }
+  body { padding-top: 70px; }
 
   /* STICKY SECTION TITLE */
   .section-title {
@@ -1195,13 +1194,13 @@ var spots = [
   { lat:43.2239, lng:6.1464, e:'🏡', c:'#e87c2b', t:'🏡 Euer Haus', d:'Pierrefeu-du-Var' },
   { lat:43.1383, lng:6.3679, e:'🌊', c:'#1a6fa8', t:'🌊 Le Lavandou', d:'12 Strände · Basis für alles', a:'#sec-straende' },
   { lat:43.0012, lng:6.3997, e:'⭐', c:'#0097a7', t:'⭐ Port-Cros', d:'Unterwasser-Nationalpark · Fähre ~17€', a:'#card-portcros' },
-  { lat:43.1219, lng:6.3924, e:'🏝️', c:'#00695c', t:'🏝️ Crique Jean Blanc', d:'Geheimbucht · ~100 Stufen', a:'#sec-bucht' },
-  { lat:43.1481, lng:6.4102, e:'🏖️', c:'#1a6fa8', t:'🏖️ Plage d\'Aiguebelle', d:'Bester Schnorchel-Strand', a:'#sec-straende' },
-  { lat:43.1420, lng:6.3877, e:'🏖️', c:'#1a6fa8', t:'🏖️ Plage de Saint-Clair', d:'Ideal für Kinder · flach & sicher', a:'#sec-straende' },
+  { lat:43.1425, lng:6.3930, e:'🏝️', c:'#00695c', t:'🏝️ Crique Jean Blanc', d:'Geheimbucht · ~100 Stufen', a:'#sec-bucht' },
+  { lat:43.1492, lng:6.4108, e:'🏖️', c:'#1a6fa8', t:'🏖️ Plage d\'Aiguebelle', d:'Bester Schnorchel-Strand', a:'#sec-straende' },
+  { lat:43.1432, lng:6.3882, e:'🏖️', c:'#1a6fa8', t:'🏖️ Plage de Saint-Clair', d:'Ideal für Kinder · flach & sicher', a:'#sec-straende' },
   { lat:43.1698, lng:6.4621, e:'🏖️', c:'#0097a7', t:'🏖️ Plage du Cavalière', d:'Ruhig · türkises Wasser', a:'#sec-straende' },
-  { lat:43.1201, lng:6.4002, e:'🏖️', c:'#0097a7', t:'🏖️ Pramousquier', d:'Familiär · gutes Schnorcheln', a:'#sec-straende' },
-  { lat:43.1456, lng:6.3922, e:'🏖️', c:'#0097a7', t:'🏖️ La Fossette', d:'Geschützte Bucht · Coco Beach dabei', a:'#sec-straende' },
-  { lat:43.1073, lng:6.4229, e:'🏖️', c:'#0097a7', t:'🏖️ L\'Estagnol', d:'Naturbelassen · wenig Touristen', a:'#sec-straende' },
+  { lat:43.1430, lng:6.4015, e:'🏖️', c:'#0097a7', t:'🏖️ Pramousquier', d:'Familiär · gutes Schnorcheln', a:'#sec-straende' },
+  { lat:43.1468, lng:6.3928, e:'🏖️', c:'#0097a7', t:'🏖️ La Fossette', d:'Geschützte Bucht · Coco Beach dabei', a:'#sec-straende' },
+  { lat:43.1450, lng:6.4220, e:'🏖️', c:'#0097a7', t:'🏖️ L\'Estagnol', d:'Naturbelassen · wenig Touristen', a:'#sec-straende' },
   { lat:43.1508, lng:6.3376, e:'🏘️', c:'#7b5ea7', t:'🏘️ Bormes-les-Mimosas', d:'Schönstes Dorf der Region', a:'#sec-wald' },
   { lat:43.2476, lng:6.2965, e:'🌰', c:'#5d4037', t:'🌰 Collobrières', d:'Kastaniendorf · Fluss zum Plantschen', a:'#card-collobrieres' },
   { lat:43.2633, lng:6.3733, e:'🏰', c:'#5d4037', t:'🏰 Chartreuse de la Verne', d:'Mittelalterliches Kloster im Wald', a:'#card-chartreuse' },
