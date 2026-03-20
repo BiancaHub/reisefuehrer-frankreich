@@ -4,8 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>🌊 Urlaub Le Lavandou — September 2026</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<!-- Leaflet entfernt — Slideshow statt Karte -->
 <style>
   /* Change 1: scroll-behavior smooth */
   html { scroll-behavior: smooth; }
@@ -74,7 +73,7 @@
   }
 
   /* CARD GRID */
-  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
 
   .card {
     background: white;
@@ -86,13 +85,13 @@
   .card:hover { transform: translateY(-4px); box-shadow: 0 8px 28px rgba(0,0,0,0.13); }
 
   .card-header {
-    padding: 18px 20px 14px;
+    padding: 10px 14px 8px;
     color: white;
-    font-size: 1.15em;
+    font-size: 0.95em;
     font-weight: 700;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
   }
   .card-header.blau    { background: linear-gradient(135deg, #1a6fa8, #0097a7); }
   .card-header.gruen   { background: linear-gradient(135deg, #2e7d32, #4caf50); }
@@ -101,18 +100,18 @@
   .card-header.rot     { background: linear-gradient(135deg, #c62828, #e53935); }
   .card-header.teal    { background: linear-gradient(135deg, #00695c, #00bcd4); }
 
-  .card-body { padding: 18px 20px; }
-  .card-body p { margin-bottom: 8px; line-height: 1.6; font-size: 0.97em; }
-  .card-body ul { padding-left: 20px; }
-  .card-body li { margin-bottom: 6px; line-height: 1.6; font-size: 0.97em; }
+  .card-body { padding: 10px 14px; }
+  .card-body p { margin-bottom: 4px; line-height: 1.4; font-size: 0.85em; }
+  .card-body ul { padding-left: 16px; }
+  .card-body li { margin-bottom: 2px; line-height: 1.4; font-size: 0.85em; }
 
   .tag {
     display: inline-block;
-    padding: 3px 10px;
+    padding: 2px 8px;
     border-radius: 12px;
-    font-size: 0.8em;
+    font-size: 0.75em;
     font-weight: 600;
-    margin: 3px 3px 3px 0;
+    margin: 2px 2px 2px 0;
   }
   .tag-blau   { background: var(--hellblau); color: var(--blau); }
   .tag-gruen  { background: #e8f5e9; color: #2e7d32; }
@@ -122,19 +121,19 @@
 
   .link-btn {
     display: inline-block;
-    margin-top: 12px;
-    padding: 8px 16px;
+    margin-top: 8px;
+    padding: 5px 12px;
     border-radius: 8px;
     background: var(--hellblau);
     color: var(--blau);
     font-weight: 600;
-    font-size: 0.88em;
+    font-size: 0.82em;
     text-decoration: none;
     border: 1.5px solid #b3d9f5;
     transition: background 0.2s;
   }
   .link-btn:hover { background: #d0eaf8; }
-  .link-btn + .link-btn { margin-left: 8px; }
+  .link-btn + .link-btn { margin-left: 6px; }
 
   /* HIGHLIGHT BOX */
   .highlight {
@@ -148,15 +147,60 @@
   }
   .highlight strong { color: var(--blau); }
 
-  /* MAP */
-  #map, .map-frame {
+  /* SLIDESHOW */
+  .slideshow {
+    position: relative;
     width: 100%;
-    height: 480px;
+    height: 380px;
     border-radius: 18px;
-    box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+    overflow: hidden;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.15);
     margin: 20px 0;
-    border: 3px solid white;
-    display: block;
+  }
+  .slideshow img {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    animation: slideshow 25s infinite;
+  }
+  .slideshow img:nth-child(1) { animation-delay: 0s; }
+  .slideshow img:nth-child(2) { animation-delay: 5s; }
+  .slideshow img:nth-child(3) { animation-delay: 10s; }
+  .slideshow img:nth-child(4) { animation-delay: 15s; }
+  .slideshow img:nth-child(5) { animation-delay: 20s; }
+  @keyframes slideshow {
+    0% { opacity: 0; }
+    4% { opacity: 1; }
+    20% { opacity: 1; }
+    24% { opacity: 0; }
+    100% { opacity: 0; }
+  }
+  .slideshow-overlay {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(transparent, rgba(0,0,0,0.6));
+    padding: 40px 24px 20px;
+    z-index: 2;
+    text-align: center;
+  }
+  .slideshow-overlay .maps-btn {
+    display: inline-block;
+    background: rgba(255,255,255,0.95);
+    color: #1a6fa8;
+    font-weight: 700;
+    font-size: 0.95em;
+    padding: 10px 22px;
+    border-radius: 30px;
+    text-decoration: none;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.2);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .slideshow-overlay .maps-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 18px rgba(0,0,0,0.3); }
+  @media (max-width: 600px) {
+    .slideshow { height: 260px; }
   }
 
   /* WETTER TABLE */
@@ -258,12 +302,57 @@
     opacity: 0; transition: opacity 0.3s; pointer-events: none;
   }
   #back-to-top.visible { opacity: 1; pointer-events: auto; }
+
+  /* PACKLISTE */
+  .packliste { background: white; border-radius: 14px; box-shadow: 0 4px 18px rgba(0,0,0,0.08); margin-bottom: 20px; overflow: hidden; }
+  .packliste-header {
+    padding: 14px 20px; font-weight: 700; font-size: 1.05em; cursor: pointer; user-select: none;
+    display: flex; align-items: center; gap: 10px; color: white;
+    transition: opacity 0.2s;
+  }
+  .packliste-header:hover { opacity: 0.85; }
+  .packliste-header.urlaub { background: linear-gradient(135deg, #1a6fa8, #0097a7); }
+  .packliste-header.apotheke { background: linear-gradient(135deg, #c62828, #e53935); }
+  .packliste-header.strand { background: linear-gradient(135deg, #e87c2b, #f5a623); }
+  .packliste-arrow { margin-left: auto; font-size: 0.7em; opacity: 0.7; }
+  .packliste-body { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
+  .packliste-body.open { max-height: 3000px; }
+  .packliste-body ul { list-style: none; padding: 12px 20px; }
+  .packliste-body li {
+    padding: 8px 0; border-bottom: 1px solid #f0f0f0; font-size: 0.95em;
+    display: flex; align-items: center; gap: 10px; cursor: pointer; user-select: none;
+  }
+  .packliste-body li:last-child { border-bottom: none; }
+  .packliste-body li.checked { opacity: 0.45; text-decoration: line-through; }
+  .packliste-check {
+    width: 22px; height: 22px; border-radius: 6px; border: 2px solid #ccc;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    font-size: 14px; transition: all 0.15s;
+  }
+  .packliste-body li.checked .packliste-check { background: var(--gruen); border-color: var(--gruen); color: white; }
+  .packliste-btns { display: flex; gap: 10px; padding: 8px 20px 14px; flex-wrap: wrap; }
+  .packliste-btn {
+    padding: 6px 14px; border-radius: 8px; border: 1.5px solid #ccc; background: #f8f8f8;
+    font-size: 0.82em; font-weight: 600; cursor: pointer; transition: background 0.2s;
+  }
+  .packliste-btn:hover { background: #e8e8e8; }
+  .packliste-progress { padding: 0 20px 4px; font-size: 0.8em; color: #888; }
+
+  @media print {
+    #main-nav, #back-to-top, .packliste-btns, .link-btn, .wetter-kompakt, #wetter-live, .slideshow { display: none !important; }
+    .packliste-body { max-height: none !important; }
+    .section-body { max-height: none !important; }
+    .packliste-check { border: 2px solid #333 !important; background: white !important; color: transparent !important; }
+    .packliste-body li.checked .packliste-check { color: #333 !important; }
+    .packliste-body li { opacity: 1 !important; text-decoration: none !important; }
+    body { padding-top: 0 !important; }
+  }
 </style>
 </head>
 <body>
 
 <nav id="main-nav">
-  <a href="#" onclick="goTo('sec-karte'); return false;">🗺️ Karte</a>
+  <a href="#" onclick="goTo('sec-slideshow'); return false;">🌅 Überblick</a>
   <a href="#" onclick="goTo('sec-schnorcheln'); return false;">🤿 Schnorcheln</a>
   <a href="#" onclick="goTo('sec-kinder'); return false;">🎉 Kids</a>
   <a href="#" onclick="goTo('sec-straende'); return false;">🏖️ Strände</a>
@@ -273,6 +362,8 @@
   <a href="#" onclick="goTo('sec-nightlife'); return false;">🎵 Abend</a>
   <a href="#" onclick="goTo('sec-action'); return false;">🎯 Action</a>
   <a href="#" onclick="goTo('sec-combos'); return false;">📅 Combos</a>
+  <a href="#" onclick="goTo('sec-budget'); return false;">💶 Budget</a>
+  <a href="#" onclick="goTo('sec-packliste'); return false;">✅ Packliste</a>
   <a href="#" onclick="goTo('sec-notfall'); return false;">📞 Nummern</a>
 </nav>
 
@@ -282,16 +373,26 @@
   <p>Côte d'Azur · Provence · Frankreich</p>
   <div class="header-meta">
     <span>📅 1.–12. September 2026</span>
-    <span>🏡 Pierrefeu-du-Var</span>
+    <span><a href="https://www.google.com/maps/search/?api=1&query=81+Chemin+de+Belle+Lame+Pierrefeu-du-Var+83390" target="_blank" style="color:white;text-decoration:none;">🏡 Pierrefeu-du-Var</a></span>
     <span>👨‍👩‍👧‍👦 2 Familien · 2 Kids</span>
   </div>
+  <div id="countdown" style="margin-top:10px; font-size:0.95em; font-weight:700; position:relative; z-index:1; text-shadow:0 1px 4px rgba(0,0,0,0.4);"></div>
 </header>
 
 <main>
 
-  <!-- KARTE — Change 6: id="sec-karte" -->
-  <div id="sec-karte" class="section-title">🗺️ Karte — Alle Spots auf einen Blick</div>
-  <div id="map"></div>
+  <!-- SLIDESHOW statt Karte -->
+  <div id="sec-slideshow" class="section-title">🌅 Le Lavandou & Umgebung</div>
+  <div class="slideshow">
+    <img src="https://images.unsplash.com/photo-1533104816931-20fa691ff6ca?w=1200&q=80" alt="Türkises Meer an der Côte d'Azur">
+    <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=80" alt="Traumstrand mit Pinien">
+    <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1200&q=80" alt="Provenzalische Landschaft">
+    <img src="https://images.unsplash.com/photo-1534258936925-c58bed479fcb?w=1200&q=80" alt="Sonnenuntergang am Mittelmeer">
+    <img src="https://images.unsplash.com/photo-1519046904884-53103b34b206?w=1200&q=80" alt="Kristallklares Wasser und Felsen">
+    <div class="slideshow-overlay">
+      <a class="maps-btn" href="https://www.google.com/maps/search/?api=1&query=81+Chemin+de+Belle+Lame+Pierrefeu-du-Var+83390" target="_blank">📍 Unterkunft auf Google Maps</a>
+    </div>
+  </div>
 
   <!-- WETTER — Change 5: compact weather replaces wetter-grid -->
   <div class="section-title">☀️ September-Wetter</div>
@@ -305,6 +406,7 @@
   <div id="wetter-live" style="margin-top:8px; font-size:0.85em; color:#555; padding:6px 4px; min-height:20px;">
     <span style="opacity:0.5">⏳ Lade aktuelles Wetter…</span>
   </div>
+  <div id="wetter-forecast" style="margin-top:10px; display:flex; gap:8px; overflow-x:auto; padding-bottom:6px;"></div>
 
   <!-- SCHNORCHELN — Change 6: id="sec-schnorcheln" -->
   <div id="sec-schnorcheln" class="section-title">🤿 Schnorcheln</div>
@@ -344,9 +446,7 @@
   <div id="sec-bucht" class="section-title">🏝️ Versteckte Bucht</div>
   <div class="highlight">
     <strong>Crique de Jean Blanc (Plage de l'Éléphant)</strong><br>
-    Eine der schönsten Geheimbuchten — weißer Sand mit Silberglitzer, absolut türkisblaues Wasser, kaum Touristen. Nur Eingeweihte kennen sie.<br><br>
-    📍 <strong>So kommt ihr hin:</strong> D559 Richtung Saint-Tropez, ca. 5 km vom Zentrum. Kleiner Parkplatz rechts, dann ~100 Stufen hinunter. Lohnt sich!<br>
-    ⏱️ <strong>Fußweg:</strong> ~5–10 Minuten ab Parkplatz (100 Stufen bergab, gleiches zurück)<br><br>
+    Eine der schönsten Geheimbuchten — weißer Sand mit Silberglitzer, absolut türkisblaues Wasser, kaum Touristen. ~100 Stufen vom Parkplatz hinunter.<br><br>
     <span class="tag tag-blau">Zu Fuß erreichbar</span>
     <span class="tag tag-gruen">Hervorragend zum Schnorcheln</span>
     <span class="tag tag-orange">Kostenlos · kaum Touristen</span>
@@ -483,15 +583,9 @@
   <!-- KÜSTENWANDERWEG -->
   <div id="sec-kuestenweg" class="section-title">🚶 Sentier du Littoral — Küstenweg</div>
   <div class="highlight">
-    <strong>Der Küstenwanderweg (Sentier du Littoral)</strong> verbindet alle Buchten und Strände von Le Lavandou auf ca. <strong>10 km</strong> entlang der Felsen. Man entdeckt unterwegs versteckte Criques, die man sonst nie findet.<br><br>
-    🗺️ <strong>Strecke:</strong> Le Lavandou → Aiguebelle → Jean Blanc → Pramousquier → Cavalière<br>
-    ⏱️ <strong>Gesamtdauer:</strong> ca. 3–4 Stunden für alle 10 km<br><br>
-    📏 <strong>Abschnitte einzeln:</strong><br>
-    &nbsp;• Le Lavandou → Aiguebelle: ~3 km · <strong>~45 Minuten</strong><br>
-    &nbsp;• Aiguebelle → Crique Jean Blanc: ~2 km · <strong>~30 Minuten</strong><br>
-    &nbsp;• Jean Blanc → Pramousquier: ~2 km · <strong>~35 Minuten</strong><br>
-    &nbsp;• Pramousquier → Cavalière: ~3 km · <strong>~50 Minuten</strong><br><br>
-    👶 <strong>Für 8-Jährige:</strong> Die ersten 3 km (bis Aiguebelle) sind leicht und ideal mit Kids<br><br>
+    <strong>Sentier du Littoral</strong> — 10 km Küstenweg entlang aller Buchten. Versteckte Criques unterwegs!<br>
+    🗺️ Le Lavandou → Aiguebelle → Jean Blanc → Pramousquier → Cavalière<br>
+    ⏱️ Gesamt: ~3–4 Stunden · 👶 Bis Aiguebelle (~3 km) ideal mit Kids<br><br>
     <span class="tag tag-blau">Kostenlos</span>
     <span class="tag tag-gruen">Kein Eintritt</span>
     <span class="tag tag-orange">Festes Schuhwerk empfohlen</span>
@@ -748,9 +842,9 @@
       <div class="card-body">
         <p>Direkt vor Ort, kein Fahren nötig — Cocktail, Meerblick, Abendstimmung:</p>
         <ul>
-          <li><strong>Le Tam-Tam Beach Bar</strong> — Strandterrasse, DJ-Abende, Cocktails, Sonnenuntergang. Beliebt, entspannt, gutes Ambiente</li>
-          <li><strong>Bar du Port</strong> — direkt am Hafen, Live-Musik in der Hochsaison, schöne Atmosphäre abends</li>
-          <li><strong>La Fossette Beach</strong> — kleiner Strandbereich mit Bar, romantisch und ruhig</li>
+          <li><strong>Le Tam-Tam Beach Bar</strong> — Strandterrasse, DJ-Abende, Cocktails, Sonnenuntergang · <a href="https://www.google.com/maps/search/?api=1&query=Le+Tam+Tam+Le+Lavandou" target="_blank" style="color:#1a6fa8;">📍</a></li>
+          <li><strong>Bar du Port</strong> — direkt am Hafen, Live-Musik · <a href="https://www.google.com/maps/search/?api=1&query=Bar+du+Port+Le+Lavandou" target="_blank" style="color:#1a6fa8;">📍</a></li>
+          <li><strong>La Fossette Beach</strong> — kleiner Strandbereich mit Bar, romantisch · <a href="https://www.google.com/maps/search/?api=1&query=Plage+de+la+Fossette+Le+Lavandou" target="_blank" style="color:#1a6fa8;">📍</a></li>
         </ul>
         <span class="tag tag-orange">Direkt in Le Lavandou</span>
         <span class="tag tag-gruen">Kein Fahren</span>
@@ -770,6 +864,7 @@
         <span class="tag tag-gruen">Normales Budget</span>
         <span class="tag tag-orange">Abend ab 22 Uhr</span>
         <br>
+        <a class="link-btn" href="https://www.google.com/maps/search/?api=1&query=bars+Toulon+port" target="_blank">📍 Toulon Hafen Maps</a>
         <a class="link-btn" href="https://www.eventbrite.fr/d/france--toulon/electronic-music/" target="_blank">🎵 Events Toulon</a>
       </div>
     </div>
@@ -868,6 +963,7 @@
         <span class="tag tag-orange">🚗 ~55 Min. (Fréjus)</span>
         <span class="tag tag-lila">Größter Park der Region</span>
         <br>
+        <a class="link-btn" href="https://www.google.com/maps/search/?api=1&query=Aqualand+Frejus" target="_blank">📍 Google Maps</a>
         <a class="link-btn" href="https://www.aqualand.fr/frejus" target="_blank">🎡 Aqualand</a>
       </div>
     </div>
@@ -1089,9 +1185,9 @@
       <div class="card-header sand">🏪 Supermärkte in Le Lavandou</div>
       <div class="card-body">
         <ul>
-          <li>🟠 <strong>Intermarché</strong> — größter Supermarkt direkt in Le Lavandou, gute Auswahl, Frischetheke</li>
-          <li>🔵 <strong>Casino / Vival</strong> — kleinere Märkte im Ort, praktisch für tägliche Besorgungen</li>
-          <li>🟡 <strong>Carrefour City</strong> — im Ortszentrum, bequem zu Fuß erreichbar</li>
+          <li>🟠 <strong>Intermarché</strong> — größter Supermarkt, gute Auswahl · <a href="https://www.google.com/maps/search/?api=1&query=Intermarche+Le+Lavandou" target="_blank" style="color:#1a6fa8;">📍</a></li>
+          <li>🔵 <strong>Casino / Vival</strong> — kleinere Märkte für tägliche Besorgungen · <a href="https://www.google.com/maps/search/?api=1&query=Casino+Supermarche+Le+Lavandou" target="_blank" style="color:#1a6fa8;">📍</a></li>
+          <li>🟡 <strong>Carrefour City</strong> — im Ortszentrum · <a href="https://www.google.com/maps/search/?api=1&query=Carrefour+City+Le+Lavandou" target="_blank" style="color:#1a6fa8;">📍</a></li>
         </ul>
         <span class="tag tag-orange">Alle direkt in Le Lavandou</span>
         <span class="tag tag-lila">🚗 ~27–30 Min. von Pierrefeu</span>
@@ -1103,8 +1199,8 @@
       <div class="card-header sand">🥖 Frisches & Markt</div>
       <div class="card-body">
         <ul>
-          <li>🥐 <strong>Boulangerie</strong> — Bäckerei morgens, Baguette & Croissants. In Le Lavandou mind. 3 Stück</li>
-          <li>🧅 <strong>Wochenmarkt Le Lavandou</strong> — Di & Sa morgens, frisches Gemüse, Käse, Oliven, Lavendel</li>
+          <li>🥐 <strong>Boulangerie</strong> — Bäckerei morgens, Baguette & Croissants · <a href="https://www.google.com/maps/search/?api=1&query=Boulangerie+Le+Lavandou" target="_blank" style="color:#1a6fa8;">📍</a></li>
+          <li>🧅 <strong>Wochenmarkt Le Lavandou</strong> — Di & Sa morgens · <a href="https://www.google.com/maps/search/?api=1&query=Marche+Le+Lavandou" target="_blank" style="color:#1a6fa8;">📍</a></li>
           <li>🫒 <strong>Marché de Bormes-les-Mimosas</strong> — Mi morgens, sehr gemütlich, lokale Produkte · <a href="https://www.google.com/maps/search/?api=1&query=Marche+Bormes+les+Mimosas" target="_blank" style="color:#1a6fa8;">📍 Maps</a></li>
         </ul>
         <span class="tag tag-gruen">Markt Di & Sa in Le Lavandou</span>
@@ -1117,7 +1213,7 @@
       <div class="card-body">
         <p>Am besten gleich im Intermarché oder Decathlon kaufen — <strong>billiger als leihen</strong>, man hat es die ganze Zeit dabei.</p>
         <ul>
-          <li>🏪 <strong>Decathlon Hyères</strong> — beste Auswahl, ~25 Min. Fahrt</li>
+          <li>🏪 <strong>Decathlon Hyères</strong> — beste Auswahl, ~25 Min. · <a href="https://www.google.com/maps/search/?api=1&query=Decathlon+Hyeres" target="_blank" style="color:#1a6fa8;">📍</a></li>
           <li>🏖️ Strandläden in Le Lavandou — teurer, aber vor Ort verfügbar</li>
         </ul>
         <span class="tag tag-blau">Empfehlung: vor Abreise kaufen oder Decathlon Hyères</span>
@@ -1139,6 +1235,142 @@
     </ul>
   </div>
 
+  <!-- BUDGET -->
+  <div id="sec-budget" class="section-title">💶 Budget-Übersicht</div>
+  <p style="margin-bottom:12px; color:#555; font-size:0.9em;">Alle Kosten auf einen Blick — pro Person, wenn nicht anders angegeben.</p>
+  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); gap:12px; margin-bottom:20px;">
+    <div class="highlight" style="margin:0; padding:14px 18px;">
+      <strong>🚗 Anreise & Auto</strong><br>
+      Maut München→Pierrefeu: ~30–40 €<br>
+      Parkscheibe: kostenlos im Supermarkt<br>
+      Parken Le Lavandou: 0–5 €/Tag
+    </div>
+    <div class="highlight" style="margin:0; padding:14px 18px;">
+      <strong>⛴️ Fähren & Ausflüge</strong><br>
+      Port-Cros Fähre: ~17–26 €/Pers.<br>
+      Porquerolles Fähre: ~20 €/Pers.<br>
+      Calanques Bootsfahrt: ~15 €/Pers.
+    </div>
+    <div class="highlight" style="margin:0; padding:14px 18px;">
+      <strong>🎯 Aktivitäten</strong><br>
+      Quad Var (1 Std.): ~60–65 €<br>
+      Minigolf: 12 € / 7 € Kind<br>
+      Chartreuse Kloster: ~5 €<br>
+      Bungee: ab 140 €
+    </div>
+    <div class="highlight" style="margin:0; padding:14px 18px;">
+      <strong>🍽️ Essen & Strand</strong><br>
+      Restaurant: 15–30 €/Pers.<br>
+      Liegestuhl+Schirm: 10–20 €/Tag<br>
+      Strandpicknick: 5–10 €/Pers.<br>
+      Öffentliche Strände: kostenlos
+    </div>
+  </div>
+
+  <!-- PACKLISTEN -->
+  <div id="sec-packliste" class="section-title">✅ Packlisten</div>
+  <p style="margin-bottom:16px; color:#555; font-size:0.95em;">Abhaken was eingepackt ist — bleibt gespeichert! 🖨️ Auch zum Ausdrucken.</p>
+
+  <div class="packliste" id="pl-urlaub">
+    <div class="packliste-header urlaub" onclick="togglePackliste('pl-urlaub')">🧳 Koffer — Urlaub allgemein <span class="packliste-arrow">▶</span></div>
+    <div class="packliste-body">
+      <div class="packliste-progress"></div>
+      <ul>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Reisepass / Personalausweis</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>EHIC-Karte (Europäische Krankenversicherungskarte)</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Führerschein</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Bargeld (€) + EC-/Kreditkarte</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Handy + Ladekabel</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Kopfhörer</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Powerbank</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Sonnencreme (LSF 50 — vor Ort teuer!)</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Sonnenbrille</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Hut / Kappe</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Badekleidung (mind. 2x)</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Leichte Sommerkleider / Shorts / T-Shirts</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Lange Hose + Pulli für Abende</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Bequeme Schuhe / Sandalen</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Feste Schuhe für Wanderungen (Küstenweg!)</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Flip-Flops / Badeschuhe</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Handtücher / Strandtuch</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Trinkflaschen (Hitze!)</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Rucksack für Tagesausflüge</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Kulturbeutel (Zahnbürste, Shampoo, Deo...)</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Waschmittel (kleine Tube)</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Regenjacke (5–6 Regentage im September)</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Parkscheibe (Disque de stationnement) fürs Auto</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Warnweste + Warndreieck (Pflicht in Frankreich!)</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Offline-Karten laden (Google Maps / Maps.me)</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Schnorchelausrüstung (oder vor Ort kaufen)</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Kamera / GoPro + Speicherkarte</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Reisespiele / Bücher für die Fahrt</li>
+      </ul>
+      <div class="packliste-btns">
+        <button class="packliste-btn" onclick="druckenListe('pl-urlaub')">🖨️ Drucken</button>
+        <button class="packliste-btn" onclick="resetListe('pl-urlaub')">↩️ Alle zurücksetzen</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="packliste" id="pl-apotheke">
+    <div class="packliste-header apotheke" onclick="togglePackliste('pl-apotheke')">💊 Reiseapotheke <span class="packliste-arrow">▶</span></div>
+    <div class="packliste-body">
+      <div class="packliste-progress"></div>
+      <ul>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Schmerzmittel (Ibuprofen / Paracetamol)</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Fieberthermometer</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Pflaster + Blasenpflaster</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Desinfektionsspray / -tücher</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Verbandszeug (Mullbinde, Kompressen)</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Mittel gegen Durchfall (Loperamid)</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Mittel gegen Übelkeit (Vomex)</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Elektrolyt-Pulver (Hitze + Durchfall)</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>After-Sun / Aloe Vera Gel</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Insektenschutz (Mückenspray)</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Fenistil / Insektenstich-Gel</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Augentropfen (Salzwasser + Chlor)</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Ohrentropfen (nach dem Schnorcheln)</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Nasenspray</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Pinzette (Splitter, Seeigel-Stacheln!)</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Persönliche Medikamente (falls nötig)</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Reiseübelkeit-Tabletten (für die Fähre)</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Zeckenzange</li>
+      </ul>
+      <div class="packliste-btns">
+        <button class="packliste-btn" onclick="druckenListe('pl-apotheke')">🖨️ Drucken</button>
+        <button class="packliste-btn" onclick="resetListe('pl-apotheke')">↩️ Alle zurücksetzen</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="packliste" id="pl-strand">
+    <div class="packliste-header strand" onclick="togglePackliste('pl-strand')">🏖️ Strandtag-Tasche <span class="packliste-arrow">▶</span></div>
+    <div class="packliste-body">
+      <div class="packliste-progress"></div>
+      <ul>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Sonnencreme nachcremen!</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Strandtuch / Strandmatte</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Sonnenschirm / Strandmuschel</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Trinkwasser (mind. 1,5 L pro Person)</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Snacks / Obst / Baguette</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Kühlbox / Kühltasche</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Schnorchelausrüstung</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Badeschuhe (Felsen + Seeigel!)</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Wasserdichte Handyhülle</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Sonnenhut / Kappe</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Wechselkleidung</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Plastiktüte für nasse Sachen</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Sandspielzeug (für die Kids)</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Buch / Zeitschrift</li>
+        <li onclick="toggleItem(this)"><span class="packliste-check"></span>Müllbeutel (Leave no trace!)</li>
+      </ul>
+      <div class="packliste-btns">
+        <button class="packliste-btn" onclick="druckenListe('pl-strand')">🖨️ Drucken</button>
+        <button class="packliste-btn" onclick="resetListe('pl-strand')">↩️ Alle zurücksetzen</button>
+      </div>
+    </div>
+  </div>
+
   <!-- NÜTZLICHE NUMMERN -->
   <div id="sec-notfall" class="section-title">📞 Nützliche Nummern & Infos</div>
 
@@ -1150,8 +1382,8 @@
           <li>🚑 <strong>Europäischer Notruf:</strong> 112</li>
           <li>👮 <strong>Polizei Frankreich:</strong> 17</li>
           <li>🚒 <strong>Feuerwehr:</strong> 18</li>
-          <li>🏥 <strong>Nächstes Krankenhaus:</strong> Hôpital de Gassin / Saint-Tropez (~30 Min.)</li>
-          <li>💊 <strong>Apotheke Le Lavandou:</strong> Pharmacie du Centre, Place du Marché</li>
+          <li>🏥 <strong>Nächstes Krankenhaus:</strong> Hôpital de Gassin (~30 Min.) · <a href="https://www.google.com/maps/search/?api=1&query=Hopital+Gassin+Saint-Tropez" target="_blank" style="color:#1a6fa8;">📍</a></li>
+          <li>💊 <strong>Apotheke:</strong> Pharmacie du Centre, Le Lavandou · <a href="https://www.google.com/maps/search/?api=1&query=Pharmacie+du+Centre+Le+Lavandou" target="_blank" style="color:#1a6fa8;">📍</a></li>
           <li>🩺 <strong>Notzahnarzt:</strong> SOS Dentiste → Google Maps suchen</li>
         </ul>
         <span class="tag tag-rot">112 immer merken!</span>
@@ -1176,65 +1408,40 @@
 </main>
 
 
-<script>
-var map = L.map('map').setView([43.13, 6.38], 11);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-  attribution: '© OpenStreetMap contributors © CARTO', maxZoom: 19
-}).addTo(map);
-
-/* pin: iconSize [0,0] + CSS translate verhindert Pixel-Sprung beim Zoomen */
-function pin(emoji, color) {
-  return L.divIcon({
-    html: '<div style="position:absolute;transform:translate(-50%,-50%);background:'+color+';border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:17px;box-shadow:0 2px 8px rgba(0,0,0,0.35);border:2px solid rgba(0,0,0,0.15);will-change:transform;">'+emoji+'</div>',
-    className:'', iconSize:[0,0], iconAnchor:[0,0], popupAnchor:[0,-17]
-  });
-}
-
-var spots = [
-  { lat:43.2239, lng:6.1464, e:'🏡', c:'#e87c2b', t:'🏡 Euer Haus', d:'Pierrefeu-du-Var' },
-  { lat:43.1383, lng:6.3679, e:'🌊', c:'#1a6fa8', t:'🌊 Le Lavandou', d:'12 Strände · Basis für alles', a:'#sec-straende' },
-  { lat:43.0012, lng:6.3997, e:'⭐', c:'#0097a7', t:'⭐ Port-Cros', d:'Unterwasser-Nationalpark · Fähre ~17€', a:'#card-portcros' },
-  { lat:43.1425, lng:6.3930, e:'🏝️', c:'#00695c', t:'🏝️ Crique Jean Blanc', d:'Geheimbucht · ~100 Stufen', a:'#sec-bucht' },
-  { lat:43.1492, lng:6.4108, e:'🏖️', c:'#1a6fa8', t:'🏖️ Plage d\'Aiguebelle', d:'Bester Schnorchel-Strand', a:'#sec-straende' },
-  { lat:43.1432, lng:6.3882, e:'🏖️', c:'#1a6fa8', t:'🏖️ Plage de Saint-Clair', d:'Ideal für Kinder · flach & sicher', a:'#sec-straende' },
-  { lat:43.1698, lng:6.4621, e:'🏖️', c:'#0097a7', t:'🏖️ Plage du Cavalière', d:'Ruhig · türkises Wasser', a:'#sec-straende' },
-  { lat:43.1430, lng:6.4015, e:'🏖️', c:'#0097a7', t:'🏖️ Pramousquier', d:'Familiär · gutes Schnorcheln', a:'#sec-straende' },
-  { lat:43.1468, lng:6.3928, e:'🏖️', c:'#0097a7', t:'🏖️ La Fossette', d:'Geschützte Bucht · Coco Beach dabei', a:'#sec-straende' },
-  { lat:43.1450, lng:6.4220, e:'🏖️', c:'#0097a7', t:'🏖️ L\'Estagnol', d:'Naturbelassen · wenig Touristen', a:'#sec-straende' },
-  { lat:43.1508, lng:6.3376, e:'🏘️', c:'#7b5ea7', t:'🏘️ Bormes-les-Mimosas', d:'Schönstes Dorf der Region', a:'#sec-wald' },
-  { lat:43.2476, lng:6.2965, e:'🌰', c:'#5d4037', t:'🌰 Collobrières', d:'Kastaniendorf · Fluss zum Plantschen', a:'#card-collobrieres' },
-  { lat:43.2633, lng:6.3733, e:'🏰', c:'#5d4037', t:'🏰 Chartreuse de la Verne', d:'Mittelalterliches Kloster im Wald', a:'#card-chartreuse' },
-  { lat:43.2059, lng:6.3248, e:'🏔️', c:'#5d4037', t:'🏔️ Col de Babaou', d:'Panorama · Meer & Inseln', a:'#card-babaou' },
-  { lat:43.1194, lng:6.1308, e:'🥗', c:'#2e7d32', t:'🥗 Gaïa Hyères', d:'Vegetarisches Restaurant', a:'#card-gaia' },
-  { lat:43.0012, lng:6.2040, e:'⛵', c:'#0097a7', t:'⛵ Porquerolles', d:'Schönste Insel Frankreichs', a:'#card-porquerolles' },
-  { lat:43.2723, lng:6.6401, e:'🎧', c:'#7b5ea7', t:'🎧 VIP Room Saint-Tropez', d:'House & Techno · ⚠️ Sept. prüfen', a:'#card-viproom' },
-  { lat:43.2255, lng:6.1465, e:'🏍️', c:'#c62828', t:'🏍️ Quad Var', d:'Pierrefeu-du-Var · Abenteuer für die ganze Familie!', a:'#card-quad' }
-];
-
-spots.forEach(function(s) {
-  var popup = '<strong>'+s.t+'</strong><br>'+s.d;
-  if(s.a) {
-    var id = s.a.substring(1);
-    popup += '<br><a href="#" onclick="goTo(\''+id+'\'); return false;" style="color:#1a6fa8;font-weight:600;font-size:0.88em;">↓ Details ansehen</a>';
-  }
-  L.marker([s.lat, s.lng], { icon: pin(s.e, s.c) }).addTo(map).bindPopup(popup, { maxWidth:200 });
-});
-</script>
+<!-- Leaflet-Karte entfernt — ersetzt durch Slideshow -->
 
 <!-- Change 10: Live Weather JavaScript -->
 <script>
 (function() {
   var codes = {0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌦️',55:'🌧️',
     61:'🌧️',63:'🌧️',65:'🌧️',71:'🌨️',73:'🌨️',75:'🌨️',80:'🌦️',81:'🌧️',95:'⛈️'};
-  fetch('https://api.open-meteo.com/v1/forecast?latitude=43.14&longitude=6.37&current=temperature_2m,weather_code,wind_speed_10m,relative_humidity_2m&timezone=Europe%2FParis')
+  var tage = ['So','Mo','Di','Mi','Do','Fr','Sa'];
+  fetch('https://api.open-meteo.com/v1/forecast?latitude=43.14&longitude=6.37&current=temperature_2m,weather_code,wind_speed_10m,relative_humidity_2m&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=Europe%2FParis')
     .then(function(r){ return r.json(); })
     .then(function(d){
       var c = d.current;
       var emoji = codes[c.weather_code] || '🌡️';
       var el = document.getElementById('wetter-live');
-      if(el) el.innerHTML = '📡 <strong>Aktuell in Le Lavandou:</strong> ' + emoji + ' '
+      if(el) el.innerHTML = '📡 <strong>Aktuell:</strong> ' + emoji + ' '
         + Math.round(c.temperature_2m) + '°C · 💨 ' + Math.round(c.wind_speed_10m) + ' km/h'
-        + ' · 💧 ' + c.relative_humidity_2m + '% Luftfeuchtigkeit';
+        + ' · 💧 ' + c.relative_humidity_2m + '%';
+      var fc = document.getElementById('wetter-forecast');
+      if(fc && d.daily) {
+        var html = '';
+        for(var i=0; i<7; i++) {
+          var dt = new Date(d.daily.time[i]);
+          var tag = tage[dt.getDay()];
+          var ico = codes[d.daily.weather_code[i]] || '🌡️';
+          var hi = Math.round(d.daily.temperature_2m_max[i]);
+          var lo = Math.round(d.daily.temperature_2m_min[i]);
+          html += '<div style="flex:0 0 auto;background:white;border-radius:10px;padding:10px 12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.07);min-width:70px;">'
+            + '<div style="font-weight:700;font-size:0.8em;color:#666;">' + tag + '</div>'
+            + '<div style="font-size:1.4em;margin:4px 0;">' + ico + '</div>'
+            + '<div style="font-weight:700;color:#1a6fa8;">' + hi + '°</div>'
+            + '<div style="font-size:0.8em;color:#999;">' + lo + '°</div></div>';
+        }
+        fc.innerHTML = html;
+      }
     })
     .catch(function(){ var el = document.getElementById('wetter-live'); if(el) el.innerHTML = ''; });
 })();
@@ -1324,6 +1531,109 @@ window.addEventListener('scroll', function() {
   var btn = document.getElementById('back-to-top');
   if(btn) btn.classList.toggle('visible', window.scrollY > 300);
 });
+</script>
+
+<!-- Countdown -->
+<script>
+(function() {
+  var start = new Date('2026-09-01T00:00:00');
+  var end = new Date('2026-09-12T00:00:00');
+  var now = new Date();
+  var el = document.getElementById('countdown');
+  if (!el) return;
+  if (now >= start && now <= end) {
+    el.textContent = '🌴 Ihr seid gerade im Urlaub! Genießt es!';
+  } else if (now > end) {
+    el.textContent = '✈️ Urlaub vorbei — hoffentlich war\'s traumhaft!';
+  } else {
+    var diff = Math.ceil((start - now) / (1000 * 60 * 60 * 24));
+    el.textContent = '✈️ Noch ' + diff + ' Tage bis zum Urlaub! 🌴';
+  }
+})();
+</script>
+
+<!-- Packliste JavaScript -->
+<script>
+(function() {
+  // Gespeicherte Haken laden
+  var saved = JSON.parse(localStorage.getItem('packliste') || '{}');
+
+  document.querySelectorAll('.packliste').forEach(function(pl) {
+    var id = pl.id;
+    var items = pl.querySelectorAll('li');
+    if (saved[id]) {
+      items.forEach(function(li, i) {
+        if (saved[id][i]) { li.classList.add('checked'); li.querySelector('.packliste-check').textContent = '✓'; }
+      });
+    }
+    updateProgress(pl);
+  });
+
+  window.toggleItem = function(li) {
+    var checked = li.classList.toggle('checked');
+    li.querySelector('.packliste-check').textContent = checked ? '✓' : '';
+    savePack();
+    updateProgress(li.closest('.packliste'));
+  };
+
+  window.togglePackliste = function(id) {
+    var pl = document.getElementById(id);
+    var body = pl.querySelector('.packliste-body');
+    var arrow = pl.querySelector('.packliste-arrow');
+    var open = body.classList.toggle('open');
+    arrow.textContent = open ? '▼' : '▶';
+  };
+
+  window.resetListe = function(id) {
+    if (!confirm('Alle Haken in dieser Liste zurücksetzen?')) return;
+    var pl = document.getElementById(id);
+    pl.querySelectorAll('li').forEach(function(li) {
+      li.classList.remove('checked');
+      li.querySelector('.packliste-check').textContent = '';
+    });
+    savePack();
+    updateProgress(pl);
+  };
+
+  window.druckenListe = function(id) {
+    var pl = document.getElementById(id);
+    var body = pl.querySelector('.packliste-body');
+    var wasOpen = body.classList.contains('open');
+    if (!wasOpen) body.classList.add('open');
+    // Alle anderen Packlisten ausblenden für Druck
+    document.querySelectorAll('.packliste').forEach(function(p) { if (p.id !== id) p.style.display = 'none'; });
+    // Alles außer Packliste ausblenden
+    var main = document.querySelector('main');
+    var hidden = [];
+    Array.from(main.children).forEach(function(el) {
+      if (!el.classList.contains('packliste') && el.id !== 'sec-packliste') {
+        if (el.style.display !== 'none') { hidden.push(el); el.style.display = 'none'; }
+      }
+    });
+    window.print();
+    // Wiederherstellen
+    hidden.forEach(function(el) { el.style.display = ''; });
+    document.querySelectorAll('.packliste').forEach(function(p) { p.style.display = ''; });
+    if (!wasOpen) body.classList.remove('open');
+  };
+
+  function savePack() {
+    var data = {};
+    document.querySelectorAll('.packliste').forEach(function(pl) {
+      var checks = [];
+      pl.querySelectorAll('li').forEach(function(li) { checks.push(li.classList.contains('checked')); });
+      data[pl.id] = checks;
+    });
+    localStorage.setItem('packliste', JSON.stringify(data));
+  }
+
+  function updateProgress(pl) {
+    var items = pl.querySelectorAll('li');
+    var checked = pl.querySelectorAll('li.checked').length;
+    var prog = pl.querySelector('.packliste-progress');
+    if (prog) prog.textContent = checked + ' / ' + items.length + ' eingepackt';
+  }
+})();
 </script>
 
 </body>
